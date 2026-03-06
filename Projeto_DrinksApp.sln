@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projeto_DrinksApp", "Projeto_DrinksApp\Projeto_DrinksApp.csproj", "{1CBD360D-C1C9-4075-912E-AE42D2764748}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1CBD360D-C1C9-4075-912E-AE42D2764748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CBD360D-C1C9-4075-912E-AE42D2764748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CBD360D-C1C9-4075-912E-AE42D2764748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CBD360D-C1C9-4075-912E-AE42D2764748}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B485FFA7-EF57-4129-AB97-A79EAC5B7B58}
+	EndGlobalSection
+EndGlobal
