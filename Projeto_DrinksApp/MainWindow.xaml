@@ -1,4 +1,4 @@
-﻿<Window x:Class="Projeto_DrinksApp.MainWindow"
+﻿ <Window x:Class="Projeto_DrinksApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Login"
@@ -10,7 +10,7 @@
 
     <Window.Resources>
 
-        <!-- ESTILO BOTÃO ARREDONDADO -->
+        <!-- BOTÃO ARREDONDADO -->
         <Style x:Key="BotaoArredondado" TargetType="Button">
             <Setter Property="Template">
                 <Setter.Value>
@@ -30,6 +30,12 @@
     </Window.Resources>
 
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black"/>
+                <GradientStop Color="#FF133AD4" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
 
         <Border Background="#2A2A40"
                 Width="350"
@@ -47,34 +53,40 @@
                            HorizontalAlignment="Center"
                            Margin="0,0,0,30"/>
 
-                <TextBlock x:Name="Lbl_Usuario"
-                           Text="Usuário"
+                <TextBlock Text="Usuário"
                            Foreground="White"
                            FontSize="14"/>
 
-                <TextBox x:Name="txtUsuario"
-                         Height="35"
-                         Margin="0,5,0,15"
-                         FontSize="14"
-                         Padding="10"
-                         BorderThickness="0"
-                         Background="#3A3A55"
-                         Foreground="White"
-                         TextChanged="txtUsuario_TextChanged"/>
-
-                <TextBlock x:Name="Lbl_Senha"
-                           Text="Senha"
-                           Foreground="White"
-                           FontSize="14"/>
-
-                <PasswordBox x:Name="txtSenha"
+                <!-- TEXTBOX ARREDONDADO -->
+                <Border CornerRadius="10"
+                        Background="#3A3A55"
+                        Margin="0,5,0,15">
+                    <TextBox x:Name="txtUsuario"
                              Height="35"
-                             Margin="0,5,0,25"
                              FontSize="14"
                              Padding="10"
                              BorderThickness="0"
-                             Background="#3A3A55"
-                             Foreground="White"/>
+                             Background="Transparent"
+                             Foreground="White"
+                             TextChanged="txtUsuario_TextChanged"/>
+                </Border>
+
+                <TextBlock Text="Senha"
+                           Foreground="White"
+                           FontSize="14"/>
+
+                <!-- PASSWORDBOX ARREDONDADO -->
+                <Border CornerRadius="10"
+                        Background="#3A3A55"
+                        Margin="0,5,0,25">
+                    <PasswordBox x:Name="txtSenha"
+                                 Height="35"
+                                 FontSize="14"
+                                 Padding="10"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 Foreground="White"/>
+                </Border>
 
                 <Button Content="Entrar"
                         Height="40"
@@ -104,3 +116,4 @@
     </Grid>
 
 </Window>
+
