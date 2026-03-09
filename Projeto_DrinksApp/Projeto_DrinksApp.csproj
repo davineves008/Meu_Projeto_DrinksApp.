@@ -9,7 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="botao-home.png" />
+    <None Remove="do-utilizador.png" />
+    <None Remove="localizacao.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.9.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="botao-home.png" />
+    <Resource Include="do-utilizador.png" />
+    <Resource Include="localizacao.png" />
   </ItemGroup>
 
 </Project>

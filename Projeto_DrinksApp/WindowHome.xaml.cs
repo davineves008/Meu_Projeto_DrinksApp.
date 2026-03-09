@@ -19,9 +19,88 @@ namespace Projeto_DrinksApp
     /// </summary>
     public partial class WindowHome : Window
     {
+        //referencia estatica pra propria janela;
+        public static WindowHome Instancia;
         public WindowHome()
         {
             InitializeComponent();
+            Instancia = this; // salva a instancia atual;
+        }
+       
+
+        private void Btn_Perfil_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        //Btn tela de cervejas;
+        private void BtnCerveja_Click(object sender, RoutedEventArgs e)
+        {
+            ConteudoPrincipal.Content = new UC_Cervejas();
+        }
+        //btn tela whisky;
+        private void BtnWhisky_Click(object sender, RoutedEventArgs e)
+        {
+            ConteudoPrincipal.Content = new UC_Whisky();
+        }
+        //Btn tela de lanches;
+        private void BtnLanches_Click(object sender, RoutedEventArgs e)
+        {
+            ConteudoPrincipal.Content = new UC_Lanches();
+        }
+        // Btn Tela principal;
+        private void BtnHome_Click(object sender, RoutedEventArgs e)
+        {
+            ConteudoPrincipal.Content = null;
+        }
+        //Btn Tela de vinhos;
+        private void BtnVinhos_Click(object sender, RoutedEventArgs e)
+        {
+            ConteudoPrincipal.Content = new UC_Vinhos();
+        }
+        //btn pra sair e logar na tela de login;
+        private void BtnSair_Click(object sender, RoutedEventArgs e)
+        {
+            var Resultado = MessageBox.Show("Deseja realmente sair e voltar a tela de login?", "sair", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if(Resultado == MessageBoxResult.Yes )
+            {
+                MainWindow Login = new MainWindow();
+                Login.Show();
+
+                this.Close();
+            }
+
+        }
+        //barra de pesquisa;
+        private void Txt_Pesquisa_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (Txt_Pesquisa.Text == "Pesquisar bebidas ou lanches...")
+            {
+                Txt_Pesquisa.Text = "";
+                Txt_Pesquisa.Foreground = Brushes.White;
+            }
+        }
+
+        private void Txt_Pesquisa_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(Txt_Pesquisa.Text))
+            {
+                Txt_Pesquisa.Text = "Pesquisar bebidas ou lanches...";
+                Txt_Pesquisa.Foreground = Brushes.Gray;
+            }
+        }
+
+        private void Txt_Pesquisa_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Aqui no futuro você colocará a lógica de filtro
+            // Ex: filtrar sua lista de produtos conforme o usuário digita
+        }
+       
+        //Btn pra abrir a tela do carrinho;
+        private void BtnAbrirCarrinho_Click(object sender, RoutedEventArgs e)
+        {
+            ConteudoPrincipal.Content = new UC_Carrinho();
         }
     }
+
 }

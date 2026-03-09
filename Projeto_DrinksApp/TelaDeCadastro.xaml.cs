@@ -25,6 +25,7 @@ namespace Projeto_DrinksApp
             InitializeComponent();
         }
 
+        //Btn pra cadastro
         private void BtnCadastrar_Click(object sender, RoutedEventArgs e)
         {
             // Capturando os dados das TextBoxes 
