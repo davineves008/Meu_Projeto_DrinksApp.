@@ -1,0 +1,153 @@
+﻿ <Window x:Class="Projeto_DrinksApp.TelaDeCadastro"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cadastro"
+        Height="500"
+        Width="800"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+
+        <!-- ESTILO BOTÃO ARREDONDADO -->
+        <Style x:Key="BotaoArredondado" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="12"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Margin="0,0,0,-35">
+
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black"/>
+                <GradientStop Color="#FF2638A2" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Border Width="480"
+                Height="401"
+                Background="#AA000000"
+                CornerRadius="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+            <StackPanel Margin="25">
+
+                <TextBlock Text="Cadastro de Cliente"
+                           FontSize="22"
+                           Foreground="White"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,20"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- COLUNA 1 -->
+                    <StackPanel Grid.Column="0">
+
+                        <TextBlock Text="Nome" Foreground="White"/>
+                        <Border CornerRadius="8" BorderBrush="White" BorderThickness="2" Margin="0,5,0,10">
+                            <TextBox x:Name="txtNome"
+                                     Background="Transparent"
+                                     Foreground="White"
+                                     BorderThickness="0"
+                                     Padding="5"
+                                     TextChanged="txtNome_TextChanged"/>
+                        </Border>
+
+                        <TextBlock Text="Email" Foreground="White"/>
+                        <Border CornerRadius="8" BorderBrush="White" BorderThickness="2" Margin="0,5,0,10">
+                            <TextBox x:Name="txtEmail"
+                                     Background="Transparent"
+                                     Foreground="White"
+                                     BorderThickness="0"
+                                     Padding="5"/>
+                        </Border>
+
+                        <TextBlock Text="Cidade" Foreground="White"/>
+                        <Border CornerRadius="8" BorderBrush="White" BorderThickness="2" Margin="0,5,0,10">
+                            <TextBox x:Name="txtCidade"
+                                     Background="Transparent"
+                                     Foreground="White"
+                                     BorderThickness="0"
+                                     Padding="5"/>
+                        </Border>
+
+                    </StackPanel>
+
+                    <!-- COLUNA 2 -->
+                    <StackPanel Grid.Column="2">
+
+                        <TextBlock Text="Usuário" Foreground="White"/>
+                        <Border CornerRadius="8" BorderBrush="White" BorderThickness="2" Margin="0,5,0,10">
+                            <TextBox x:Name="txtUsuario"
+                                     Background="Transparent"
+                                     Foreground="White"
+                                     BorderThickness="0"
+                                     Padding="5"/>
+                        </Border>
+
+                        <TextBlock Text="CPF" Foreground="White"/>
+                        <Border CornerRadius="8" BorderBrush="White" BorderThickness="2" Margin="0,5,0,10">
+                            <TextBox x:Name="txtCPF"
+                                     Background="Transparent"
+                                     Foreground="White"
+                                     BorderThickness="0"
+                                     Padding="5"/>
+                        </Border>
+
+                        <TextBlock Text="Senha" Foreground="White"/>
+                        <Border CornerRadius="8" BorderBrush="White" BorderThickness="2" Margin="0,5,0,10">
+                            <PasswordBox x:Name="txtSenha"
+                                         Background="Transparent"
+                                         Foreground="White"
+                                         BorderThickness="0"
+                                         Padding="5"/>
+                        </Border>
+
+                    </StackPanel>
+
+                </Grid>
+
+                <Button x:Name="Btn_Cadastrar"
+                        Content="Cadastrar"
+                        Height="35"
+                        Width="200"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Margin="0,20,0,0"
+                        Style="{StaticResource BotaoArredondado}"
+                        Click="BtnCadastrar_Click"/>
+
+                <Button Content="Voltar"
+                        Height="30"
+                        Width="100"
+                        Margin="0,10,0,0"
+                        BorderThickness="1"
+                        Style="{StaticResource BotaoArredondado}"
+                        Click="BtnVoltar_Click"/>
+
+            </StackPanel>
+
+        </Border>
+
+    </Grid>
+</Window>

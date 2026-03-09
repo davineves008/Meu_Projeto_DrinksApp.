@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="Projeto_DrinksApp.UC_Vinhos"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="350" Width="600">
+
+    <UserControl.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF2D0A16" Offset="0"/>
+            <GradientStop Color="#FF630D2B" Offset="1"/>
+        </LinearGradientBrush>
+    </UserControl.Background>
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+
+                <TextBlock Text="MENU DE VINHOS" Foreground="#FFFFD700" FontSize="24" HorizontalAlignment="Center" FontFamily="Sitka Subheading"/>
+                <TextBlock Text="Selecione uma safra especial:" Foreground="White" HorizontalAlignment="Center" Margin="0,5,0,25"/>
+
+                <WrapPanel HorizontalAlignment="Center">
+
+                    <Border Background="#44000000" CornerRadius="10" Width="140" Height="190" Margin="10" BorderBrush="#FFFFD700" BorderThickness="1">
+                        <StackPanel>
+                            <Image Source="C:\Users\Usuario\OneDrive\Imagens/vinho_Tinto.png" Height="90" Margin="5"/>
+                            <TextBlock Text="Vinho Tinto" Foreground="White" HorizontalAlignment="Center" FontWeight="Bold"/>
+                            <TextBlock Text="R$ 45,90" Foreground="#FFFFD700" HorizontalAlignment="Center" Margin="5"/>
+                            <Button Content="Comprar" Click="BtnComprar_Click" Tag="Vinho Tinto" Background="#8B0000" Foreground="White" Width="100" Margin="5"/>
+                        </StackPanel>
+                    </Border>
+
+                </WrapPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
