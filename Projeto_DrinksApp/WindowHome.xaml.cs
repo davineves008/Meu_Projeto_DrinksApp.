@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Projeto_DrinksApp.Models;
 
 namespace Projeto_DrinksApp
 {
@@ -21,12 +22,16 @@ namespace Projeto_DrinksApp
     {
         //referencia estatica pra propria janela;
         public static WindowHome Instancia;
-        public WindowHome()
+        public WindowHome(string enderecoCliente)
         {
             InitializeComponent();
-            Instancia = this; // salva a instancia atual;
+
+            if (!string.IsNullOrEmpty(enderecoCliente))
+            {
+                Txt_Endereco.Text = enderecoCliente;
+            }
         }
-       
+
 
         private void Btn_Perfil_Click(object sender, RoutedEventArgs e)
         {
@@ -100,7 +105,33 @@ namespace Projeto_DrinksApp
         private void BtnAbrirCarrinho_Click(object sender, RoutedEventArgs e)
         {
             ConteudoPrincipal.Content = new UC_Carrinho();
+            AtualizarBadgeCarrinho();
+
         }
+        private void BtnPedidos_Click(object sender, RoutedEventArgs e)
+        {
+            ConteudoPrincipal.Content = new UC_Pedidos();
+        }
+
+        //metodo pra atualiza bolinha carrinho;
+        public void AtualizarBadgeCarrinho()
+        {
+            // Soma a quantidade de todos os itens na lista global
+            int totalItens = App.CarrinhoGlobal.Sum(p => p.Quantidade);
+            Txt_ContadorCarrinho.Text = totalItens.ToString();
+        }
+        private void BtnConfig_Click(object sender, RoutedEventArgs e)
+        {
+            // 1. Instancia a User Control de Interface
+            UC_Interface telaConfig = new UC_Interface();
+
+            // 2. Insere a UC dentro do ContentControl que você definiu no XAML
+            ConteudoPrincipal.Content = new UC_Config();
+
+            // Opcional: Você pode esconder outros elementos da Row 1 (os botões de categoria)
+            // se quiser que a tela de configuração use todo o espaço vertical da direita.
+        }
+
     }
 
 }

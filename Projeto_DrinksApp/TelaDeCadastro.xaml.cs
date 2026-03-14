@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.TextFormatting;
 using System.Windows.Shapes;
 using Projeto_DrinksApp.Models;
 
@@ -26,87 +27,41 @@ namespace Projeto_DrinksApp
         }
 
         //Btn pra cadastro
-        private void BtnCadastrar_Click(object sender, RoutedEventArgs e)
-        {
-            // Capturando os dados das TextBoxes 
-            string nome = txtNome.Text;
-            string email = txtEmail.Text;
-            string cidade = txtCidade.Text;
-            string cpf = txtCPF.Text;
-            string senha = txtSenha.Password; // PasswordBox usa .Password em vez de .Text
-            string usuario = txtUsuario.Text; // Novo campo
-
-            // VALIDAÇÕES
-            //val. nome
-            if (string.IsNullOrWhiteSpace(nome))
-            {
-                MessageBox.Show("Digite o nome.");
-                txtNome.Focus();
-                return;
-            }
-
-           
-            //valida usuario;
-            if (string.IsNullOrWhiteSpace(usuario))
-            {
-                MessageBox.Show("Digite o usuário.");
-                txtUsuario.Focus();
-                return;
-            }
-
-            //val. senha;
-            if (string.IsNullOrWhiteSpace(senha))
-            {
-                MessageBox.Show("Digite a senha.");
-                txtSenha.Focus();
-                return;
-            }
-            //val. senha;
-            if (!cpf.All(char.IsDigit))
-            {
-                MessageBox.Show("CPF deve conter apenas números.");
-                txtCPF.Focus();
-                return;
-            }
-
-            //val. email;
-            if (!email.Contains("@") || !email.Contains("."))
-            {
-                MessageBox.Show("Email inválido.");
-                txtEmail.Focus();
-                return;
-            }
-
-            //val. senha;
-            if (senha.Length < 3)
-            {
-                MessageBox.Show("A senha deve ter pelo menos 3 caracteres.");
-                txtSenha.Focus();
-                return;
-            }
-
-            ClienteRepositorio repo = new ClienteRepositorio();
-
-            if (repo.Cadastrar(nome, email, cidade, cpf, senha, usuario)) 
-            {
-                MessageBox.Show("Usuário cadastrado com sucesso!");
-                this.Close(); // Fecha a tela de cadastro após o sucesso
-            }
-            else
-            {
-                MessageBox.Show("Erro ao cadastrar. Verifique os dados.");
-            }
-        }
-
+        
         //btn_Voltar;
         private void BtnVoltar_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void txtNome_TextChanged(object sender, TextChangedEventArgs e)
+       //btn pra cadastra cliente e endereço
+        private void BtnCadastrar_Click(object sender, RoutedEventArgs e)
         {
+            // Criamos o objeto cliente com os dados da tela
+            Clientes novoCliente = new Clientes()
+            {
+                Nome = txtNome.Text,
+                Email = txtEmail.Text,
+                Usuario = txtUsuario.Text,
+                Senha = txtSenha.Password,
+                CPF = txtCPF.Text,
+                EnderecoResidencial = new Endereço()
+                {
+                    Logradouro = txtLogradouro.Text,
+                    Numero = txtNumero.Text,
+                    Bairro = txtBairro.Text,
+                    Cidade = txtCidade.Text,
+                    Estado = txtEstado.Text,
+                    Cep = txtCEP.Text
+                }
+            };
 
+            ClienteRepositorio repo = new ClienteRepositorio();
+            if (repo.CadastrarCompleto(novoCliente))
+            {
+                MessageBox.Show("Cadastro realizado com sucesso!");
+                this.Close();
+            }
         }
     }
 }

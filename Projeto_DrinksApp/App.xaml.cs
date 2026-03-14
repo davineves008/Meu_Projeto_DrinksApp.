@@ -7,38 +7,38 @@ namespace Projeto_DrinksApp
     public partial class App : Application
     {
         // Lista global que armazena os itens selecionados
-        public static ObservableCollection<Produto> CarrinhoGlobal = new ObservableCollection<Produto>();
+        public static ObservableCollection<Produto> CarrinhoGlobal { get; set; } = new ObservableCollection<Produto>();
 
-        public static void AdicionarAoCarrinho(Produto p)
+        public static void AdicionarAoCarrinho(Produto novoProduto)
         {
-            var itemExistente = CarrinhoGlobal.FirstOrDefault(item => item.IdProduto == p.IdProduto);
+            // Verifica se esse item específico já está na lista
+            var itemNoCarrinho = CarrinhoGlobal.FirstOrDefault(p => p.Nome == novoProduto.Nome);
 
-            if (itemExistente != null)
+            if (itemNoCarrinho != null)
             {
-                itemExistente.Quantidade++;
+                // Se já existir, apenas incrementa a quantidade na linha existente
+                itemNoCarrinho.Quantidade++;
             }
             else
             {
-                if (p.Quantidade <= 0) p.Quantidade = 1;
-                CarrinhoGlobal.Add(p);
+                // Se for um produto novo (ex: você tinha Vinho e agora adicionou Brahma), 
+                // o .Add() cria automaticamente uma nova linha visual no carrinho.
+                CarrinhoGlobal.Add(novoProduto);
             }
-
-            // Chamamos o contador da bolinha vermelha aqui
-            AtualizaContadorGlobal();
         }
-
-        public static void AtualizaContadorGlobal()
+        public static void NotificarMudancaNoCarrinho()
         {
-            // Soma a quantidade total de itens no carrinho
-            int totalItens = CarrinhoGlobal.Sum(p => p.Quantidade);
-
-            // Encontra a Window principal e atualiza o texto do contador
-            var mainWindow = Application.Current.MainWindow as WindowHome;
-            if (mainWindow != null)
+            // Procura a janela principal
+            var principal = Application.Current.MainWindow as WindowHome;
+            if (principal != null)
             {
-                // Certifique-se de que o nome no XAML seja Txt_ContadorCarrinho
-                mainWindow.Txt_ContadorCarrinho.Text = totalItens.ToString();
+                // Atualiza a bolinha (Badge)
+                principal.AtualizarBadgeCarrinho();
+
+                // Se o UC_Carrinho estiver aberto, atualiza o texto do Total
+                // Você pode usar uma lógica de busca de controles ou eventos
             }
         }
+
     }
 }

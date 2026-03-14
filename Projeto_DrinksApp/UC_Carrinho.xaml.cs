@@ -24,19 +24,27 @@ namespace Projeto_DrinksApp
         {
             InitializeComponent();
             ListaCarrinho.ItemsSource = App.CarrinhoGlobal;
+
             AtualizarTotalGeral();
         }
 
         //Btn pra adicionar produtos no carrinho; 
-        public void BtnAdicionar_Click(object sender, RoutedEventArgs e)
+        // Dentro do método que aumenta a quantidade
+        private void BtnAdicionar_Click(object sender, RoutedEventArgs e)
         {
-            var botao = sender as Button;
-            var Produto = botao.DataContext as Produto;
-
-            if (Produto != null)
+            var produto = (sender as Button).DataContext as Produto;
+            if (produto != null)
             {
-                Produto.Quantidade++;
-                AtualizarTotalGeral();
+                produto.Quantidade++; // Aumenta a quantidade
+
+                AtualizarTotalGeral(); // Atualiza o total do carrinho
+
+                // AQUI ENTRA O CÓDIGO:
+                var principal = Application.Current.MainWindow as WindowHome;
+                if (principal != null)
+                {
+                    principal.AtualizarBadgeCarrinho();
+                }
             }
         }
 
@@ -44,23 +52,31 @@ namespace Projeto_DrinksApp
         public void BtnRemover_Click(object sender, RoutedEventArgs e)
         {
             var botao = sender as Button;
-            var Produto = botao.DataContext as Produto;
+            var produto = botao.DataContext as Produto;
 
-            if(Produto != null)
+            if (produto != null)
             {
-                if (Produto.Quantidade > 1)
+                if (produto.Quantidade > 1)
                 {
-                    Produto.Quantidade--;
+                    produto.Quantidade--; // O OnPropertyChanged vai atualizar o texto da quantidade sozinho!
                 }
                 else
                 {
-                    //caso tenha 1 produto e clico em retirar ele limpa a lista;
-                    App.CarrinhoGlobal.Remove(Produto);
+                    App.CarrinhoGlobal.Remove(produto);
                 }
                 AtualizarTotalGeral();
+
+                // Se quiser atualizar a bolinha vermelha aqui também:
+                // No UC_Carrinho.xaml.cs
+                var principal = Application.Current.MainWindow as WindowHome;
+                if (principal != null)
+                {
+                    principal.AtualizarBadgeCarrinho();
+                }
             }
-                
         }
+                
+        
 
         //metodo pra atualizar geral o carrinho;
         public void AtualizarTotalGeral()
@@ -69,6 +85,9 @@ namespace Projeto_DrinksApp
             Txt_TotalGeral.Text = string.Format("R$ {0:f2}", total);
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
 }

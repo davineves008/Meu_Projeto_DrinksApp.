@@ -27,16 +27,28 @@ namespace Projeto_DrinksApp
         //Btn de comprar da tela de lanches;
         private void BtnComprar_Click(object sender, RoutedEventArgs e)
         {
-            // Supondo que você carregou os dados no Tag ou que o DataContext é o Produto
             var botao = sender as Button;
 
-            // Se estiver usando o Binding no DataContext do botão:
-            var produtoSelecionado = botao.DataContext as Produto;
-
-            if (produtoSelecionado != null)
+            if (botao != null)
             {
-                // CHAMADA GLOBAL:
+                // Criamos um objeto temporário com os dados que você colocou no botão
+                Produto produtoSelecionado = new Produto
+                {
+                    Nome = botao.Tag.ToString(),
+                    // Convertemos o Uid (preço) de string para decimal
+                    Preco = decimal.Parse(botao.Uid, System.Globalization.CultureInfo.InvariantCulture),
+                    Quantidade = 1
+                };
+
+                // Adiciona ao carrinho global
                 App.AdicionarAoCarrinho(produtoSelecionado);
+
+                // Atualiza a bolinha (Badge) na WindowHome
+                var windowPrincipal = Application.Current.MainWindow as WindowHome;
+                if (windowPrincipal != null)
+                {
+                    windowPrincipal.AtualizarBadgeCarrinho();
+                }
 
                 MessageBox.Show($"{produtoSelecionado.Nome} adicionado ao carrinho!");
             }

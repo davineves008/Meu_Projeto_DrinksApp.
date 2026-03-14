@@ -27,19 +27,37 @@ namespace Projeto_DrinksApp
         //Btn Comprar tela de vinhos;
         private void BtnComprar_Click(object sender, RoutedEventArgs e)
         {
-            // Supondo que você carregou os dados no Tag ou que o DataContext é o Produto
             var botao = sender as Button;
 
-            // Se estiver usando o Binding no DataContext do botão:
-            var produtoSelecionado = botao.DataContext as Produto;
-
-            if (produtoSelecionado != null)
+            if (botao != null)
             {
-                // CHAMADA GLOBAL:
-                App.AdicionarAoCarrinho(produtoSelecionado);
+                // Se o Uid estiver vazio, usamos 0.00 para não dar erro
+                string precoTxt = string.IsNullOrEmpty(botao.Uid) ? "0.00" : botao.Uid;
 
-                MessageBox.Show($"{produtoSelecionado.Nome} adicionado ao carrinho!");
+                try
+                {
+                    Produto produtoSelecionado = new Produto
+                    {
+                        Nome = botao.Tag?.ToString() ?? "Produto sem nome",
+                        Preco = decimal.Parse(precoTxt, System.Globalization.CultureInfo.InvariantCulture),
+                        Quantidade = 1
+                    };
+
+                    App.AdicionarAoCarrinho(produtoSelecionado);
+
+                    if (Application.Current.MainWindow is WindowHome principal)
+                    {
+                        principal.AtualizarBadgeCarrinho();
+                    }
+
+                    MessageBox.Show($"{produtoSelecionado.Nome} adicionado!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Verifique o Uid do botão {botao.Tag}: " + ex.Message);
+                }
             }
         }
     }
 }
+

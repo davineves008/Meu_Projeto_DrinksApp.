@@ -43,16 +43,26 @@ namespace Projeto_DrinksApp
 
             ClienteRepositorio repo = new ClienteRepositorio();
 
-            if (repo.Login(Usuario, senha))
-            {
-                MessageBox.Show("Login realizado com sucesso!");
+            // Chamamos o método que agora retorna o objeto completo
+            var clienteLogado = repo.Login(txtUsuario.Text, txtSenha.Password);
 
-                WindowHome pagina = new WindowHome();
-                pagina.Show();
+            // MUDANÇA AQUI: Em vez de 'if (login)', usamos 'if (clienteLogado != null)'
+            if (clienteLogado != null)
+            {
+                MessageBox.Show("Bem-vindo, " + clienteLogado.Nome);
+
+                // Pegamos o endereço formatado da sua classe Endereço
+                // Mude de .Rua para .Logradouro ou use a sua propriedade pronta:
+                string enderecoParaExibir = clienteLogado.EnderecoResidencial?.EnderecoCompleto ?? "Sem endereço";
+
+                WindowHome home = new WindowHome(enderecoParaExibir);
+                home.Show();
+                this.Close();
             }
             else
             {
-                MessageBox.Show("Usuario ou senha inválidos!");
+                // Se cair aqui, é porque o SELECT não trouxe nenhum registro (usuário ou senha errados)
+                MessageBox.Show("Usuário ou senha inválidos!");
             }
         }
 

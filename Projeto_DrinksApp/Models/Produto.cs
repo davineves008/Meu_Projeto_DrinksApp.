@@ -21,23 +21,17 @@ namespace Projeto_DrinksApp
             get => _quantidade;
             set
             {
-                if (_quantidade != value)
-                {
-                    _quantidade = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(PrecoTotal)); // Notifica que o total mudou
-                }
+                _quantidade = value;
+                OnPropertyChanged("Quantidade");
+                OnPropertyChanged("PrecoTotal"); // Avisa que o preço total mudou também!
             }
         }
 
-        // Propriedade calculada para exibir no Carrinho
-        public decimal PrecoTotal => Quantidade * Preco;
+    
+        public decimal PrecoTotal => Preco * Quantidade;
 
-        // Implementação da interface para atualização automática da tela
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+        protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
+
 }

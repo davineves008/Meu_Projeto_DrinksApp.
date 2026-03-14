@@ -28,10 +28,38 @@ namespace Projeto_DrinksApp
         //Btn comprar da tela de Whisky;
         private void BtnComprar_Click(object sender, RoutedEventArgs e)
         {
-            var produto = (sender as Button).DataContext as Produto;
-            if (produto != null)
+            // O 'sender' é o botão exato que o usuário clicou
+            var botao = sender as Button;
+
+            if (botao != null && botao.Tag != null)
             {
-                App.AdicionarAoCarrinho(produto);
+                try
+                {
+                    // Criamos o produto pegando o NOME do Tag e o PREÇO do Uid do botão clicado
+                    Produto produtoSelecionado = new Produto
+                    {
+                        Nome = botao.Tag.ToString(),
+                        // Lê o preço (ex: 8.50 ou 140.00) que está no Uid do XAML
+                        Preco = decimal.Parse(botao.Uid, System.Globalization.CultureInfo.InvariantCulture),
+                        Quantidade = 1
+                    };
+
+                    // Adiciona ao carrinho global (aquela lista que criamos no App.xaml.cs)
+                    App.AdicionarAoCarrinho(produtoSelecionado);
+
+                    // Atualiza a bolinha azul/vermelha na tela principal
+                    if (Application.Current.MainWindow is WindowHome principal)
+                    {
+                        principal.AtualizarBadgeCarrinho();
+                    }
+
+                    // Agora o MessageBox vai mostrar o nome real: "Brahma adicionada", "Jack Daniels adicionado", etc.
+                    MessageBox.Show($"{produtoSelecionado.Nome} adicionado ao carrinho!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro técnico ao ler o preço do botão: " + ex.Message);
+                }
             }
         }
     }
