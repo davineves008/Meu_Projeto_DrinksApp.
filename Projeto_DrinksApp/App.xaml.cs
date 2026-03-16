@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Projeto_DrinksApp.Models;
+using System.Collections.ObjectModel;
 using System.Linq; // Necessário para o FirstOrDefault
 using System.Windows;
 
@@ -6,6 +7,9 @@ namespace Projeto_DrinksApp
 {
     public partial class App : Application
     {
+        //Classe global onde salva os dados do usuario logado;
+        public static Clientes ClienteLogado { get; set; }
+
         // Lista global que armazena os itens selecionados
         public static ObservableCollection<Produto> CarrinhoGlobal { get; set; } = new ObservableCollection<Produto>();
 

@@ -26,7 +26,7 @@
                 </StackPanel>
             </Button>
 
-            <Button Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1">
+            <Button  Click="BtnGoNotificacoes_Click" Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1">
                 <StackPanel>
                     <Path Data="M12,22A2,2 0 0,0 14,20H10A2,2 0 0,0 12,22M18,16V11C18,7.93 16.36,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16Z" Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
                     <TextBlock Text="Notificações" Foreground="White" FontWeight="SemiBold"/>

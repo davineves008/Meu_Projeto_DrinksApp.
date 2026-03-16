@@ -26,16 +26,23 @@ namespace Projeto_DrinksApp
         }
         private void AplicarTema(bool isDark)
         {
-            if (isDark)
+            // Cor para o fundo (Escuro ou Transparente/Claro)
+            Brush corFundo = isDark
+                ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1A1A1D")) // Um preto mais profundo
+                : Brushes.White;
+
+            // 1. Aplica ao próprio UserControl
+            this.Background = corFundo;
+
+            // 2. Aplica à Janela Principal (WindowHome)
+            var principal = Window.GetWindow(this) as WindowHome;
+            if (principal != null)
             {
-                // Fundo Escuro Suave
-                this.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D2D30"));
-                // Ajustar cores dos textos (Você precisará dar nomes aos TextBlocks no XAML se quiser mudar todos)
-            }
-            else
-            {
-                // Fundo Claro (Volta para transparente ou branco)
-                this.Background = Brushes.Transparent;
+                principal.Background = corFundo;
+
+                // Dica: Se você tiver uma Grid principal na WindowHome chamada 'GridPrincipal', 
+                // você pode mudar o fundo dela também:
+                // principal.GridPrincipal.Background = corFundo;
             }
         }
 
@@ -72,6 +79,8 @@ namespace Projeto_DrinksApp
             MessageBox.Show($"Configurações Salvas!\nTema: {tema}\nIdioma: {idioma}",
                             "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+
     }
 }
 

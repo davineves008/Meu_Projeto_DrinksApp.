@@ -24,7 +24,7 @@ namespace Projeto_DrinksApp
         {
             InitializeComponent();
             ListaCarrinho.ItemsSource = App.CarrinhoGlobal;
-
+            
             AtualizarTotalGeral();
         }
 
@@ -75,8 +75,8 @@ namespace Projeto_DrinksApp
                 }
             }
         }
-                
-        
+
+
 
         //metodo pra atualizar geral o carrinho;
         public void AtualizarTotalGeral()
@@ -85,9 +85,73 @@ namespace Projeto_DrinksApp
             Txt_TotalGeral.Text = string.Format("R$ {0:f2}", total);
         }
 
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            // 1. Verificar se o carrinho não está vazio
+            if (App.CarrinhoGlobal == null || App.CarrinhoGlobal.Count == 0)
+            {
+                MessageBox.Show("Seu carrinho está vazio! Adicione alguns drinks antes de finalizar.",
+                                "Carrinho Vazio", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
+            // 2. Pergunta sobre o CPF (Sim ou Não)
+            MessageBoxResult resultadoCpf = MessageBox.Show("Deseja informar o CPF na nota fiscal?",
+                                                            "CPF na Compra",
+                                                            MessageBoxButton.YesNo,
+                                                            MessageBoxImage.Question);
+
+            if (resultadoCpf == MessageBoxResult.Yes)
+            {
+                // Aqui você poderia abrir um pequeno InputBox ou janela para o CPF.
+                // Por enquanto, vamos simular que ele foi informado.
+                MessageBox.Show("CPF registrado com sucesso!", "Informação", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+            // 3. Confirmar a Venda
+         
+            // Calcule uma única vez aqui no topo
+            decimal total = (decimal)App.CarrinhoGlobal.Sum(p => p.PrecoTotal);
+
+            MessageBox.Show($"Venda confirmada com sucesso!\nValor Total: R$ {total:F2}\n\nObrigado pela preferência!",
+                            "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            if (App.ClienteLogado != null)
+            {
+                // Criamos um resumo dos itens (Ex: "Brahma, Coca-Cola...")
+                string resumo = string.Join(", ", App.CarrinhoGlobal.Select(p => p.Nome));
+
+              //Chamo os atributos ultimos pedidos da classe cliente;
+                App.ClienteLogado.UltimoPedidoDescricao = resumo;
+                App.ClienteLogado.UltimoPedidoValor = total; // Reutilizando a variável lá de cima
+                App.ClienteLogado.UltimoPedidoData = DateTime.Now;
+            }
+
+            // 4. Limpar o carrinho após a venda
+            FinalizarEResetarCarrinho();
+        }
+
+
+
+        private void FinalizarEResetarCarrinho()
+        {
+            App.CarrinhoGlobal.Clear();
+
+            // Atualiza a tela do carrinho para mostrar que está vazio
+            ListaCarrinho.ItemsSource = null;
+            ListaCarrinho.ItemsSource = App.CarrinhoGlobal;
+
+            // Zera o texto do Total Geral
+            Txt_TotalGeral.Text = "R$ 0,00";
+
+            // Opcional: Voltar para a tela inicial após a venda
+            var principal = Window.GetWindow(this) as WindowHome;
+            if (principal != null)
+            {
+                // principal.ConteudoPrincipal.Content = new UC_Home(); 
+            }
         }
     }
 }
+

@@ -19,8 +19,13 @@ namespace Projeto_DrinksApp.Models
         public string Senha { get; set; }
         public string  Usuario { get; set; }
 
+        // Propriedade para guardar o resumo do último pedido
+        public string UltimoPedidoDescricao { get; set; }
+        public decimal UltimoPedidoValor { get; set; }
+        public DateTime? UltimoPedidoData { get; set; }
+
         // Liga o objeto Endereco diretamente ao Cliente
-       public Endereço EnderecoResidencial { get; set; }
+        public Endereço EnderecoResidencial { get; set; }
 
     }
 }

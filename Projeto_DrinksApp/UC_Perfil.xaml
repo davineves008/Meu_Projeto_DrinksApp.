@@ -58,13 +58,25 @@
                 <Grid>
                     <StackPanel>
                         <TextBlock x:Name="lblUltimoPedido" 
-           Text="Combo Cerveja Brahma (12 un) + Gelo" 
-           Foreground="White" 
-           FontWeight="Medium" 
-           FontSize="14"/>
-                        <TextBlock Text="Entregue em: 12/03/2026" Foreground="#66FFFFFF" FontSize="11" Margin="0,5,0,0"/>
+                       Text="Nenhum pedido recente" 
+                       Foreground="White" 
+                       FontWeight="Medium" 
+                       FontSize="14"/>
+
+                        <TextBlock x:Name="txtDataPedido" 
+                       Text="Entregue em: --/--/----" 
+                       Foreground="#66FFFFFF" 
+                       FontSize="11" 
+                       Margin="0,5,0,0"/>
                     </StackPanel>
-                    <TextBlock Text="R$ 89,90" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="#FF00F9FF" FontSize="18" FontWeight="Bold"/>
+
+                    <TextBlock x:Name="txtValorPedido" 
+                   Text="R$ 0,00" 
+                   HorizontalAlignment="Right" 
+                   VerticalAlignment="Center" 
+                   Foreground="#FF00F9FF" 
+                   FontSize="18" 
+                   FontWeight="Bold"/>
                 </Grid>
             </Border>
 

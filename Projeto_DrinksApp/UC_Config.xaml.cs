@@ -24,6 +24,8 @@ namespace Projeto_DrinksApp
         {
             InitializeComponent();
         }
+
+        //Btn pra tela de interfaces;
         private void BtnGoInterface_Click(object sender, RoutedEventArgs e)
         {
             // Acessa a WindowHome e troca o conteúdo do ContentControl principal
@@ -34,12 +36,22 @@ namespace Projeto_DrinksApp
             }
         }
 
+        //Btn pra tela de perfil;
         private void BtnGoPerfil_Click(object sender, RoutedEventArgs e)
         {
             var windowHome = Window.GetWindow(this) as WindowHome;
             if (windowHome != null)
             {
                 windowHome.ConteudoPrincipal.Content = new UC_Perfil();
+            }
+        }
+        private void BtnGoNotificacoes_Click(object sender, RoutedEventArgs e)
+        {
+            // Acessa a Window principal para trocar o conteúdo
+            var mainWindow = System.Windows.Application.Current.MainWindow as WindowHome;
+            if (mainWindow != null)
+            {
+                mainWindow.ConteudoPrincipal.Content = new UC_Notificacoes();
             }
         }
     }

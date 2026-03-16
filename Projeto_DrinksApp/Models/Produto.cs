@@ -30,7 +30,10 @@ namespace Projeto_DrinksApp
     
         public decimal PrecoTotal => Preco * Quantidade;
 
+        //Evento que permite atualizar caso um nome ou um valor mude.
         public event PropertyChangedEventHandler PropertyChanged;
+
+        //avisa quando houver uma mudança no codigo xaml.
         protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 

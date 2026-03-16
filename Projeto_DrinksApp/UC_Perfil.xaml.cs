@@ -23,6 +23,7 @@ namespace Projeto_DrinksApp
         public UC_Perfil()
         {
             InitializeComponent();
+            CarregarDadosDoUsuario();
         }
         //btn Salvar perfil
         private void btnSalvarPerfil_Click(object sender, RoutedEventArgs e)
@@ -39,6 +40,35 @@ namespace Projeto_DrinksApp
                             "Perfil Atualizado",
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
+        }
+        private void CarregarDadosDoUsuario()
+        {
+            // Verifica se existe alguém logado para não dar erro de referência nula
+            if (App.ClienteLogado != null)
+            {
+                txtNome.Text = App.ClienteLogado.Nome;
+                txtEmail.Text = App.ClienteLogado.Email;
+
+                // Como você mencionou que tem a classe Endereço ligada:
+                if (App.ClienteLogado.EnderecoResidencial != null)
+                {
+                    txtEndereco.Text = App.ClienteLogado.EnderecoResidencial.Logradouro;
+                    txtCidade.Text = App.ClienteLogado.EnderecoResidencial.Cidade;
+                }
+                // Preenche a área de "Último Pedido Realizado"
+                if (!string.IsNullOrEmpty(App.ClienteLogado.UltimoPedidoDescricao))
+                {
+                    lblUltimoPedido.Text = App.ClienteLogado.UltimoPedidoDescricao;
+
+                    // Supondo que você tenha esses nomes no seu XAML:
+                    txtDataPedido.Text = $"Entregue em: {App.ClienteLogado.UltimoPedidoData?.ToString("dd/MM/yyyy")}";
+                    txtValorPedido.Text = App.ClienteLogado.UltimoPedidoValor.ToString("C2"); // Formato R$
+                }
+                else
+                {
+                    lblUltimoPedido.Text = "Nenhum pedido realizado ainda.";
+                }
+            }
         }
     }
 }

@@ -49,10 +49,11 @@ namespace Projeto_DrinksApp
             // MUDANÇA AQUI: Em vez de 'if (login)', usamos 'if (clienteLogado != null)'
             if (clienteLogado != null)
             {
+                //Salva na variavel criada na app.xaml.
+                App.ClienteLogado = clienteLogado;
+
                 MessageBox.Show("Bem-vindo, " + clienteLogado.Nome);
 
-                // Pegamos o endereço formatado da sua classe Endereço
-                // Mude de .Rua para .Logradouro ou use a sua propriedade pronta:
                 string enderecoParaExibir = clienteLogado.EnderecoResidencial?.EnderecoCompleto ?? "Sem endereço";
 
                 WindowHome home = new WindowHome(enderecoParaExibir);
