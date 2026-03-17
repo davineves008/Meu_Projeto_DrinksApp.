@@ -89,58 +89,79 @@ namespace Projeto_DrinksApp
         //Btn Finalizar a venda;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // 1. Verificar se o carrinho não está vazio
+            // 1. Validação inicial (Carrinho vazio)
             if (App.CarrinhoGlobal == null || App.CarrinhoGlobal.Count == 0)
             {
-                MessageBox.Show("Seu carrinho está vazio! Adicione alguns drinks antes de finalizar.",
-                                "Carrinho Vazio", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Seu carrinho está vazio!", "Carrinho Vazio", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            // 2. Pergunta sobre o CPF (Sim ou Não)
-            MessageBoxResult resultadoCpf = MessageBox.Show("Deseja informar o CPF na nota fiscal?",
-                                                            "CPF na Compra",
-                                                            MessageBoxButton.YesNo,
-                                                            MessageBoxImage.Question);
+            // --- NOVO: VALIDAÇÃO DO PIN DE SEGURANÇA ---
+            // Você pode usar uma Window personalizada ou o Interaction.InputBox (precisa da referência Microsoft.VisualBasic)
+            string pinDigitado = Microsoft.VisualBasic.Interaction.InputBox("Digite seu PIN de 4 dígitos para confirmar a venda:", "Segurança do PDV", "");
 
+            if (pinDigitado != App.ClienteLogado.Senha)
+            {
+                App.ContadorPin++; // Variável que criamos no App.xaml.cs
+
+                if (App.ContadorPin >= 4)
+                {
+                    MessageBox.Show("Limite de tentativas excedido! O sistema será bloqueado.", "SEGURANÇA", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    // LOGOUT FORÇADO
+                    App.ClienteLogado = null;
+                    App.ContadorPin = 0;
+                    new MainWindow().Show();
+                    Window.GetWindow(this).Close();
+                    return;
+                }
+                else
+                {
+                    int restantes = 4 - App.ContadorPin;
+                    MessageBox.Show($"PIN Incorreto! Tentativas restantes: {restantes}", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return; // Interrompe o método aqui para não finalizar a venda
+                }
+            }
+
+            // Se chegou aqui, o PIN está correto! Resetamos as tentativas.
+            App.ContadorPin = 0;
+
+            // 2. Pergunta do CPF (Só acontece após o PIN estar correto)
+            MessageBoxResult resultadoCpf = MessageBox.Show("Deseja informar o CPF?", "CPF", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (resultadoCpf == MessageBoxResult.Yes)
             {
-                // Aqui você poderia abrir um pequeno InputBox ou janela para o CPF.
-                // Por enquanto, vamos simular que ele foi informado.
-                MessageBox.Show("CPF registrado com sucesso!", "Informação", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("CPF registrado!");
             }
 
-            // 3. Confirmar a Venda
-         
-            // Calcule uma única vez aqui no topo
-            decimal total = (decimal)App.CarrinhoGlobal.Sum(p => p.PrecoTotal);
+            // --- PARTE DO BANCO DE DADOS (Agora protegida pelo PIN) ---
+            ProdutoRepositorio repoProd = new ProdutoRepositorio();
+            decimal totalVenda = (decimal)App.CarrinhoGlobal.Sum(p => p.PrecoTotal);
+            string resumoProdutos = string.Join(", ", App.CarrinhoGlobal.Select(p => p.Nome));
 
-            MessageBox.Show($"Venda confirmada com sucesso!\nValor Total: R$ {total:F2}\n\nObrigado pela preferência!",
-                            "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            foreach (var item in App.CarrinhoGlobal)
+            {
+                repoProd.ExcluirProdutoDoBanco(item.IdProduto);
+            }
 
-            // Dentro do seu botão de finalizar venda no Carrinho:
             if (App.ClienteLogado != null)
             {
-                PedidoRepositorio repo = new PedidoRepositorio();
-
+                PedidoRepositorio repoPed = new PedidoRepositorio();
                 Pedido p = new Pedido();
-                p.ValorTotal = App.CarrinhoGlobal.Sum(x => x.PrecoTotal);
-                p.Observacoes = string.Join(", ", App.CarrinhoGlobal.Select(x => x.Nome));
+                p.ValorTotal = totalVenda;
+                p.Observacoes = resumoProdutos;
 
-                // GRAVA NO BANCO DE DADOS
-                repo.InserirPedido(p, App.ClienteLogado.IdCliente);
+                repoPed.InserirPedido(p, App.ClienteLogado.IdCliente);
 
-                MessageBox.Show("Pedido salvo no banco de dados!");
-
-                // Agora sim, limpa o carrinho
-                App.CarrinhoGlobal.Clear();
+                App.ClienteLogado.UltimoPedidoDescricao = resumoProdutos;
+                App.ClienteLogado.UltimoPedidoValor = totalVenda;
+                App.ClienteLogado.UltimoPedidoData = DateTime.Now;
             }
 
-            // 4. Limpar o carrinho após a venda
+            // 3. Feedback e Limpeza
+            MessageBox.Show($"Venda confirmada com sucesso!\nTotal: {totalVenda:C2}", "Sucesso");
+            App.CarrinhoGlobal.Clear();
             FinalizarEResetarCarrinho();
         }
-
-
         //metodo que reseta e limpa o carrinho;
         private void FinalizarEResetarCarrinho()
         {

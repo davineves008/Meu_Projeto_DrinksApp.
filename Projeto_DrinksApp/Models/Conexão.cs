@@ -2,7 +2,7 @@
 
 public class Conexao
 {
-    private static string stringConexao = @"Server=TQR216785\SQLEXPRESS;Database=DrinkApps;User Id=tds;Password=tds123;";
+    public static string stringConexao = @"Server=TQR216785\SQLEXPRESS;Database=DrinkApps;User Id=tds;Password=tds123;";
 
     public static SqlConnection GetConnection()
     {

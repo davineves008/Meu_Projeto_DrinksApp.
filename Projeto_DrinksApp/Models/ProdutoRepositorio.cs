@@ -40,5 +40,19 @@ namespace Projeto_DrinksApp.Models
             }
             return lista;
         }
+
+        public void ExcluirProdutoDoBanco(int produtoId)
+        {
+            using (SqlConnection conn = new SqlConnection(strCon))
+            {
+                // Query para deletar o produto pelo ID
+                string sql = "DELETE FROM Produtos WHERE Id = @id";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@id", produtoId);
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

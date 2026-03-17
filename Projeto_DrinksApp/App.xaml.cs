@@ -12,6 +12,8 @@ namespace Projeto_DrinksApp
 {
     public partial class App : Application
     {
+        public static int ContadorPin { get; set; } = 0;
+
         //Classe global onde salva os dados do usuario logado;
         public static Clientes ClienteLogado { get; set; }
 
@@ -20,6 +22,7 @@ namespace Projeto_DrinksApp
 
 
         
+        //metodo que adiciona produtoss no carrinho
         public static void AdicionarAoCarrinho(Produto novoProduto)
         {
             // Verifica se esse item específico já está na lista
