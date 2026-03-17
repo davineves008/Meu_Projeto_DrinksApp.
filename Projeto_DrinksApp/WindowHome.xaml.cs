@@ -97,10 +97,18 @@ namespace Projeto_DrinksApp
 
         private void Txt_Pesquisa_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Aqui no futuro você colocará a lógica de filtro
-            // Ex: filtrar sua lista de produtos conforme o usuário digita
+            string termo = Txt_Pesquisa.Text;
+
+            if (termo.Length >= 3)
+            {
+                ProdutoRepositorio repo = new ProdutoRepositorio();
+                var resultados = repo.PesquisarProdutos(termo);
+
+                // Aqui você carrega a tela que exibe os produtos
+                // ConteudoPrincipal.Content = new UC_Produtos(resultados);
+            }
         }
-       
+
         //Btn pra abrir a tela do carrinho;
         private void BtnAbrirCarrinho_Click(object sender, RoutedEventArgs e)
         {
@@ -111,6 +119,14 @@ namespace Projeto_DrinksApp
         private void BtnPedidos_Click(object sender, RoutedEventArgs e)
         {
             ConteudoPrincipal.Content = new UC_Pedidos();
+        }
+
+        //Btn que abre a tela de perfil;
+        private void BtnPerfil_Click(object sender, RoutedEventArgs e)
+        {
+            UC_Perfil telaPerfil = new UC_Perfil();
+
+            ConteudoPrincipal.Content = telaPerfil;
         }
 
         //metodo pra atualiza bolinha carrinho;
@@ -128,8 +144,21 @@ namespace Projeto_DrinksApp
             // 2. Insere a UC dentro do ContentControl que você definiu no XAML
             ConteudoPrincipal.Content = new UC_Config();
 
-            // Opcional: Você pode esconder outros elementos da Row 1 (os botões de categoria)
-            // se quiser que a tela de configuração use todo o espaço vertical da direita.
+           
+        }
+
+        //metodo que limpa a lista de pedidos assim que fechar o programa;
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                PedidoRepositorio repo = new PedidoRepositorio();
+                repo.LimparPedidosAntigos();
+            }
+            catch (Exception ex)
+            {
+                // Opcional: logar o erro caso a limpeza falhe ao fechar
+            }
         }
 
     }

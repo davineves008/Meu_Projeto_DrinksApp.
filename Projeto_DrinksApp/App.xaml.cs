@@ -1,7 +1,12 @@
-﻿using Projeto_DrinksApp.Models;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Data.SqlClient;
 using System.Linq; // Necessário para o FirstOrDefault
 using System.Windows;
+using Projeto_DrinksApp.Models;
+using static Projeto_DrinksApp.Models.Pedido;
+
+
+using System.Data;
 
 namespace Projeto_DrinksApp
 {
@@ -13,6 +18,8 @@ namespace Projeto_DrinksApp
         // Lista global que armazena os itens selecionados
         public static ObservableCollection<Produto> CarrinhoGlobal { get; set; } = new ObservableCollection<Produto>();
 
+
+        
         public static void AdicionarAoCarrinho(Produto novoProduto)
         {
             // Verifica se esse item específico já está na lista

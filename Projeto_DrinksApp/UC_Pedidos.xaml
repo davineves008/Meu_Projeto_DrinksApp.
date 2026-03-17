@@ -6,24 +6,39 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid Background="#1A1A2E">
-        <StackPanel Margin="20">
-            <TextBlock Text="Meus Pedidos" FontSize="24" Foreground="White" Margin="0,0,0,20"/>
-            <DataGrid x:Name="dgpedidos" 
+    <DataGrid x:Name="dgpedidos" 
           AutoGenerateColumns="False" 
+          ItemsSource="{Binding}"
           Background="Transparent" 
-          RowBackground="#33FFFFFF" 
-          Foreground="White"
-          BorderThickness="0"
-          CanUserAddRows="False">
+          RowBackground="#22FFFFFF" 
+          AlternatingRowBackground="#33FFFFFF" 
+          Foreground="White" 
+          BorderThickness="0" 
+          CanUserAddRows="False"
+          HeadersVisibility="Column"
+          GridLinesVisibility="None">
 
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Nº Pedido" Binding="{Binding IdPedido}" Width="80"/>
-                    <DataGridTextColumn Header="Data" Binding="{Binding Data}" Width="150"/>
-                    <DataGridTextColumn Header="Total" Binding="{Binding TotalGeral, StringFormat='R$ {0:F2}'}" Width="100"/>
-                    <DataGridTextColumn Header="Observação" Binding="{Binding Observacao}" Width="*"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </StackPanel>
-    </Grid>
+        <DataGrid.Resources>
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="Background" Value="#11FFFFFF"/>
+                <Setter Property="Foreground" Value="#FF00F9FF"/>
+                <Setter Property="Padding" Value="10,5,10,5"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+        </DataGrid.Resources>
+
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Nº Pedido" Binding="{Binding IdPedido}" Width="80"/>
+            <DataGridTextColumn Header="Data" Binding="{Binding DataPedido, StringFormat=dd/MM/yyyy}" Width="120"/>
+            <DataGridTextColumn Header="Total" Binding="{Binding ValorTotal, StringFormat=C2}" Width="100">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="#FF00F9FF"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="Observação" Binding="{Binding Observacoes}" Width="*"/>
+        </DataGrid.Columns>
+    </DataGrid>
 </UserControl>

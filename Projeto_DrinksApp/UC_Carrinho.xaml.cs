@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Projeto_DrinksApp.Models;
 
 namespace Projeto_DrinksApp
 {
@@ -85,7 +86,7 @@ namespace Projeto_DrinksApp
             Txt_TotalGeral.Text = string.Format("R$ {0:f2}", total);
         }
 
-
+        //Btn Finalizar a venda;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // 1. Verificar se o carrinho não está vazio
@@ -117,15 +118,22 @@ namespace Projeto_DrinksApp
             MessageBox.Show($"Venda confirmada com sucesso!\nValor Total: R$ {total:F2}\n\nObrigado pela preferência!",
                             "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
+            // Dentro do seu botão de finalizar venda no Carrinho:
             if (App.ClienteLogado != null)
             {
-                // Criamos um resumo dos itens (Ex: "Brahma, Coca-Cola...")
-                string resumo = string.Join(", ", App.CarrinhoGlobal.Select(p => p.Nome));
+                PedidoRepositorio repo = new PedidoRepositorio();
 
-              //Chamo os atributos ultimos pedidos da classe cliente;
-                App.ClienteLogado.UltimoPedidoDescricao = resumo;
-                App.ClienteLogado.UltimoPedidoValor = total; // Reutilizando a variável lá de cima
-                App.ClienteLogado.UltimoPedidoData = DateTime.Now;
+                Pedido p = new Pedido();
+                p.ValorTotal = App.CarrinhoGlobal.Sum(x => x.PrecoTotal);
+                p.Observacoes = string.Join(", ", App.CarrinhoGlobal.Select(x => x.Nome));
+
+                // GRAVA NO BANCO DE DADOS
+                repo.InserirPedido(p, App.ClienteLogado.IdCliente);
+
+                MessageBox.Show("Pedido salvo no banco de dados!");
+
+                // Agora sim, limpa o carrinho
+                App.CarrinhoGlobal.Clear();
             }
 
             // 4. Limpar o carrinho após a venda
@@ -133,7 +141,7 @@ namespace Projeto_DrinksApp
         }
 
 
-
+        //metodo que reseta e limpa o carrinho;
         private void FinalizarEResetarCarrinho()
         {
             App.CarrinhoGlobal.Clear();

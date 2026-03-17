@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Projeto_DrinksApp.Models;
 
 
 namespace Projeto_DrinksApp
@@ -52,7 +53,10 @@ namespace Projeto_DrinksApp
                 //Salva na variavel criada na app.xaml.
                 App.ClienteLogado = clienteLogado;
 
-                MessageBox.Show("Bem-vindo, " + clienteLogado.Nome);
+                MessageBox.Show($"Seja bem-vindo, {clienteLogado.Nome}!\nPrepare-se para os melhores drinks.",
+                 "DrinksApp 🍹",
+                 MessageBoxButton.OK,
+                 MessageBoxImage.Information);
 
                 string enderecoParaExibir = clienteLogado.EnderecoResidencial?.EnderecoCompleto ?? "Sem endereço";
 
@@ -75,7 +79,10 @@ namespace Projeto_DrinksApp
 
         private void txtUsuario_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            // Seu código aqui (ex: validar se o campo está vazio)
         }
+
+      
+
     }
 }

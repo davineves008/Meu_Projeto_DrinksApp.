@@ -11,12 +11,13 @@ public class ClienteRepositorio
             try
             {
                 conn.Open();
-                // Fazemos o JOIN entre Clientes (c) e Endereços (e) usando o IdCliente
+                // ADICIONADO: c.IdCliente no SELECT
                 string query = @"
-    SELECT c.nome, e.Logradouro, e.Numero, e.Bairro, e.Cidade, e.Estado 
-    FROM Clientes c
-    LEFT JOIN Endereco e ON c.IdCliente = e.IdCliente
-    WHERE c.Usuario = @Usuario AND c.Senha = @Senha";
+ SELECT c.IdCliente, c.nome, e.Logradouro, e.Numero, e.Bairro, e.Cidade, e.Estado 
+ FROM Clientes c
+ LEFT JOIN Endereco e ON c.IdCliente = e.IdCliente
+ WHERE c.Usuario = @Usuario AND c.Senha = @Senha";
+
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Usuario", usuario);
@@ -27,9 +28,11 @@ public class ClienteRepositorio
                         if (reader.Read())
                         {
                             Clientes cliente = new Clientes();
+
+                            // ESTA LINHA É A CHAVE: Captura o ID real do banco
+                            cliente.IdCliente = Convert.ToInt32(reader["IdCliente"]);
                             cliente.Nome = reader["nome"]?.ToString();
 
-                            // Verificamos se existe logradouro no banco antes de criar o objeto de endereço
                             if (reader["Logradouro"] != DBNull.Value)
                             {
                                 cliente.EnderecoResidencial = new Endereço

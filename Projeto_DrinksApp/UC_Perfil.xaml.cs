@@ -24,6 +24,7 @@ namespace Projeto_DrinksApp
         {
             InitializeComponent();
             CarregarDadosDoUsuario();
+          
         }
         //btn Salvar perfil
         private void btnSalvarPerfil_Click(object sender, RoutedEventArgs e)
@@ -48,6 +49,7 @@ namespace Projeto_DrinksApp
             {
                 txtNome.Text = App.ClienteLogado.Nome;
                 txtEmail.Text = App.ClienteLogado.Email;
+
 
                 // Como você mencionou que tem a classe Endereço ligada:
                 if (App.ClienteLogado.EnderecoResidencial != null)

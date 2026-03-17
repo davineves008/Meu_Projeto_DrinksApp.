@@ -35,7 +35,7 @@ namespace Projeto_DrinksApp
         }
 
        //btn pra cadastra cliente e endereço
-        private void BtnCadastrar_Click(object sender, RoutedEventArgs e)
+        public  void BtnCadastrar_Click(object sender, RoutedEventArgs e)
         {
             // Criamos o objeto cliente com os dados da tela
             Clientes novoCliente = new Clientes()

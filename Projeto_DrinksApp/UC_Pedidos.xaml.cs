@@ -12,6 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static Projeto_DrinksApp.Models.Pedido;
+using System;
+using System.Collections.Generic;
+
+using System.Data;
+using Projeto_DrinksApp.Models; // Isso faz o C# encontrar a classe Pedido
 
 namespace Projeto_DrinksApp
 {
@@ -30,9 +36,29 @@ namespace Projeto_DrinksApp
 
         public void CarregarLista()
         {
-            // Vincula à lista global que tem as bebidas e lanches
-            dgpedidos.ItemsSource = null; // Limpa para garantir
-            dgpedidos.ItemsSource = App.CarrinhoGlobal;
+            try
+            {
+                // 1. Criar o repositório (Isso resolve a ondinha vermelha no 'repo')
+                PedidoRepositorio repo = new PedidoRepositorio();
+
+                // 2. Buscar os dados do banco usando o ID do cliente logado
+                // Verifique se na sua classe Cliente a propriedade é 'Id' ou 'idcliente'
+                var listaDePedidos = repo.ListarPedidosPorCliente(App.ClienteLogado.IdCliente);
+
+                // 3. Vincula ao DataGrid
+                dgpedidos.ItemsSource = null; // Limpa o que tinha antes
+                dgpedidos.ItemsSource = listaDePedidos; // Exibe os pedidos do banco
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar histórico: " + ex.Message);
+            }
+        }
+
+
+        private void dgpedidos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
