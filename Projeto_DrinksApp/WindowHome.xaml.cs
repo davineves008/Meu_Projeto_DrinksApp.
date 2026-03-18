@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -95,19 +96,58 @@ namespace Projeto_DrinksApp
             }
         }
 
+
+        //Metodo de Pesquisa com PopUp;
         private void Txt_Pesquisa_TextChanged(object sender, TextChangedEventArgs e)
         {
             string termo = Txt_Pesquisa.Text;
 
-            if (termo.Length >= 3)
+            if (termo != "Pesquisar bebidas ou lanches..." && termo.Length >= 3)
             {
                 ProdutoRepositorio repo = new ProdutoRepositorio();
                 var resultados = repo.PesquisarProdutos(termo);
 
-                // Aqui você carrega a tela que exibe os produtos
-                // ConteudoPrincipal.Content = new UC_Produtos(resultados);
+                if (resultados.Count > 0)
+                {
+                    ListSugestoes.ItemsSource = resultados; // Joga os produtos na lista do popup
+                    PopupSugestoes.IsOpen = true;           // Abre a janelinha
+                }
+                else
+                {
+                    PopupSugestoes.IsOpen = false;          // Fecha se não achar nada
+                }
+            }
+            else
+            {
+                PopupSugestoes.IsOpen = false;
             }
         }
+
+        //Metodo pra ver detalhes do produto;
+        private void ListSugestoes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Verifica se o usuário realmente clicou em algo
+            if (ListSugestoes.SelectedItem is Produto produtoSelecionado)
+            {
+                // 1. Preenche a barra de pesquisa com o nome exato do produto
+                Txt_Pesquisa.Text = produtoSelecionado.Nome;
+
+                // 2. Fecha a janelinha de sugestões (o Popup)
+                PopupSugestoes.IsOpen = false;
+
+                // 3. Como você ainda não tem a UC_Produtos, vamos mostrar um resumo:
+                MessageBox.Show($"Produto Selecionado: {produtoSelecionado.Nome}\n" +
+                                $"Preço: {produtoSelecionado.Preco:C2}\n\n" +
+                                "Em breve: Tela de detalhes completa!",
+                                "Informações do Produto",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
+
+                // 4. Importante: Reseta a seleção para que o evento possa disparar de novo
+                ListSugestoes.SelectedItem = null;
+            }
+        }
+
 
         //Btn pra abrir a tela do carrinho;
         private void BtnAbrirCarrinho_Click(object sender, RoutedEventArgs e)

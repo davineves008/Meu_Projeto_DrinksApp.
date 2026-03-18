@@ -138,9 +138,17 @@ namespace Projeto_DrinksApp
             decimal totalVenda = (decimal)App.CarrinhoGlobal.Sum(p => p.PrecoTotal);
             string resumoProdutos = string.Join(", ", App.CarrinhoGlobal.Select(p => p.Nome));
 
+
             foreach (var item in App.CarrinhoGlobal)
             {
+                // 1. Baixa do estoque
                 repoProd.ExcluirProdutoDoBanco(item.IdProduto);
+
+                // 2. Registra a venda com a hora exata do clique
+                VendaRepositorio repoVenda = new VendaRepositorio();
+
+                // Passamos o DateTime.Now aqui
+                repoVenda.RegistrarVenda(item.IdProduto, App.ClienteLogado.IdCliente, item.PrecoTotal, DateTime.Now);
             }
 
             if (App.ClienteLogado != null)

@@ -12,6 +12,11 @@ namespace Projeto_DrinksApp
 {
     public partial class App : Application
     {
+
+        //linha de conexao com o sql pra venda produto;
+        public static string LinhaConexao = @"Server=TQR216785\SQLEXPRESS;Database=DrinkApps;User Id=tds;Password=tds123;";
+
+        //contador pra confirma venda;
         public static int ContadorPin { get; set; } = 0;
 
         //Classe global onde salva os dados do usuario logado;

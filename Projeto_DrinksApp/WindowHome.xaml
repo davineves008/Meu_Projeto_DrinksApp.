@@ -69,7 +69,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Label Content="DrinksApp" 
+        <Label Content="DrinksApps" 
                Grid.Column="0" Grid.Row="0" 
                HorizontalAlignment="Center" VerticalAlignment="Center" 
                Foreground="#FF00F9FF" 
@@ -148,6 +148,24 @@
                         <Path Data="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L19.71,19L18.29,20.41L13.01,15.14C11.87,16.11 10.39,16.7 8.75,16.7A7.75,7.75 0 0,1 1,8.95A7.75,7.75 0 0,1 8.75,1.2M9.5,5A4.5,4.5 0 0,0 5,9.5A4.5,4.5 0 0,0 9.5,14A4.5,4.5 0 0,0 14,9.5A4.5,4.5 0 0,0 9.5,5Z" 
                               Fill="#FF00F9FF" Stretch="Uniform" Width="16" Height="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
                         <TextBox x:Name="Txt_Pesquisa" Grid.Column="1" Text="Pesquisar bebidas..." Background="Transparent" BorderBrush="Transparent" Foreground="White" VerticalAlignment="Center" Margin="5,0,10,0" FontSize="13" GotFocus="Txt_Pesquisa_GotFocus" LostFocus="Txt_Pesquisa_LostFocus" TextChanged="Txt_Pesquisa_TextChanged"/>
+                        <Popup x:Name="PopupSugestoes" 
+       PlacementTarget="{Binding ElementName=Txt_Pesquisa}" 
+       Placement="Bottom" 
+       StaysOpen="False" 
+       AllowsTransparency="True">
+
+                            <Border Background="#1A1A1A" BorderBrush="#FF00F9FF" BorderThickness="1" 
+            Width="{Binding ElementName=Txt_Pesquisa, Path=ActualWidth}" MaxHeight="300">
+
+                                <ListBox x:Name="ListSugestoes" 
+                 Background="Transparent" 
+                 BorderThickness="0"
+                 Foreground="White"
+                 DisplayMemberPath="Nome" 
+                 SelectionChanged="ListSugestoes_SelectionChanged">
+                                </ListBox>
+                            </Border>
+                        </Popup>
                     </Grid>
                 </Border>
             </StackPanel>
