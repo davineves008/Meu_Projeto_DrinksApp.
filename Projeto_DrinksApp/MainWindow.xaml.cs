@@ -50,15 +50,17 @@ namespace Projeto_DrinksApp
             // MUDANÇA AQUI: Em vez de 'if (login)', usamos 'if (clienteLogado != null)'
             if (clienteLogado != null)
             {
-                //Salva na variavel criada na app.xaml.
+                // CORREÇÃO: Usamos o objeto 'clienteLogado' que o seu repositório já devolveu.
+                // Não usamos 'reader' aqui porque ele não existe neste contexto.
                 App.ClienteLogado = clienteLogado;
 
-                MessageBox.Show($"Seja bem-vindo, {clienteLogado.Nome}!\nPrepare-se para os melhores drinks.",
+                MessageBox.Show($"Seja bem-vindo, {App.ClienteLogado.Nome}!\nPrepare-se para os melhores drinks.",
                  "DrinksApp 🍹",
                  MessageBoxButton.OK,
                  MessageBoxImage.Information);
 
-                string enderecoParaExibir = clienteLogado.EnderecoResidencial?.EnderecoCompleto ?? "Sem endereço";
+                // Pegamos o endereço do objeto que acabou de logar
+                string enderecoParaExibir = App.ClienteLogado.EnderecoResidencial?.EnderecoCompleto ?? "Sem endereço";
 
                 WindowHome home = new WindowHome(enderecoParaExibir);
                 home.Show();
@@ -82,7 +84,7 @@ namespace Projeto_DrinksApp
             // Seu código aqui (ex: validar se o campo está vazio)
         }
 
-      
+
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,21 +27,30 @@ namespace Projeto_DrinksApp
             CarregarDadosDoUsuario();
           
         }
-        //btn Salvar perfil
+        //btn Salvar as alterações editadas.
         private void btnSalvarPerfil_Click(object sender, RoutedEventArgs e)
         {
-            // Coletando os dados editados
-            string nome = txtNome.Text;
-            string email = txtEmail.Text;
-            string endereco = txtEndereco.Text;
-            string cidade = txtCidade.Text;
+            // 1. Coletando os dados da tela
+            string nomeEditado = txtNome.Text;
+            string emailEditado = txtEmail.Text;
 
-            // Aqui você enviaria para o Banco de Dados ou salvaria no arquivo
-            // Por enquanto, vamos dar um feedback para o usuário
-            MessageBox.Show($"Dados de {nome} salvos com sucesso!\nEndereço: {endereco}, {cidade}",
-                            "Perfil Atualizado",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
+            if (App.ClienteLogado != null)
+            {
+                ClienteRepositorio repo = new ClienteRepositorio();
+
+                // 2. Tenta salvar no Banco de Dados
+                bool sucesso = repo.AtualizarCliente(App.ClienteLogado.IdCliente, nomeEditado, emailEditado);
+
+                if (sucesso)
+                {
+                    // 3. MUITO IMPORTANTE: Atualiza a memória do App
+                    // Se não fizer isso, o PIN ou outras telas ainda usarão o nome/email antigo
+                    App.ClienteLogado.Nome = nomeEditado;
+                    App.ClienteLogado.Email = emailEditado;
+
+                    MessageBox.Show("Perfil atualizado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
         }
         private void CarregarDadosDoUsuario()
         {
@@ -72,5 +82,6 @@ namespace Projeto_DrinksApp
                 }
             }
         }
+
     }
 }

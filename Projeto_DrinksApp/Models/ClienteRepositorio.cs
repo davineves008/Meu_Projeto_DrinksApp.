@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Windows;
 using Projeto_DrinksApp.Models;
 
 public class ClienteRepositorio
@@ -11,12 +12,12 @@ public class ClienteRepositorio
             try
             {
                 conn.Open();
-                // ADICIONADO: c.IdCliente no SELECT
+                // 1. ADICIONADO: c.Senha no SELECT
                 string query = @"
- SELECT c.IdCliente, c.nome, e.Logradouro, e.Numero, e.Bairro, e.Cidade, e.Estado 
- FROM Clientes c
- LEFT JOIN Endereco e ON c.IdCliente = e.IdCliente
- WHERE c.Usuario = @Usuario AND c.Senha = @Senha";
+                SELECT c.IdCliente, c.nome, c.Senha, c.Email, e.Logradouro, e.Numero, e.Bairro, e.Cidade, e.Estado 
+                FROM Clientes c
+                LEFT JOIN Endereco e ON c.IdCliente = e.IdCliente
+                WHERE c.Usuario = @Usuario AND c.Senha = @Senha";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -29,9 +30,12 @@ public class ClienteRepositorio
                         {
                             Clientes cliente = new Clientes();
 
-                            // ESTA LINHA É A CHAVE: Captura o ID real do banco
                             cliente.IdCliente = Convert.ToInt32(reader["IdCliente"]);
                             cliente.Nome = reader["nome"]?.ToString();
+
+                            // 2. IMPORTANTE: Agora salvamos a senha no objeto para usar no PIN depois
+                            cliente.Senha = reader["Senha"]?.ToString();
+                            cliente.Email = reader["Email"]?.ToString();
 
                             if (reader["Logradouro"] != DBNull.Value)
                             {
@@ -110,6 +114,31 @@ public class ClienteRepositorio
             {
                 transacao.Rollback(); // Cancela tudo se der erro
                 System.Windows.MessageBox.Show("Erro ao cadastrar: " + ex.Message);
+                return false;
+            }
+        }
+    }
+
+
+    //quando edito os dados pela tela de perfil ele ataualiza no banco de dados.
+    public bool AtualizarCliente(int id, string nome, string email)
+    {
+        using (SqlConnection conn = Conexao.GetConnection())
+        {
+            try
+            {
+                conn.Open();
+                string query = "UPDATE Clientes SET nome = @nome, Email = @email WHERE IdCliente = @id";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@nome", nome);
+                cmd.Parameters.AddWithValue("@email", email);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                return cmd.ExecuteNonQuery() > 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao atualizar banco: " + ex.Message);
                 return false;
             }
         }

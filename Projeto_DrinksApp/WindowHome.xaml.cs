@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Projeto_DrinksApp.Models;
+using System.Data.SqlClient;
 
 namespace Projeto_DrinksApp
 {
@@ -80,6 +81,7 @@ namespace Projeto_DrinksApp
         //barra de pesquisa;
         private void Txt_Pesquisa_GotFocus(object sender, RoutedEventArgs e)
         {
+            // Padronizei para o texto completo
             if (Txt_Pesquisa.Text == "Pesquisar bebidas ou lanches...")
             {
                 Txt_Pesquisa.Text = "";
@@ -96,25 +98,29 @@ namespace Projeto_DrinksApp
             }
         }
 
-
-        //Metodo de Pesquisa com PopUp;
+        //Metodo de pesquisa 
         private void Txt_Pesquisa_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (PopupSugestoes == null) return;
+
             string termo = Txt_Pesquisa.Text;
 
-            if (termo != "Pesquisar bebidas ou lanches..." && termo.Length >= 3)
+            // Verificação rigorosa para não pesquisar o placeholder
+            if (!string.IsNullOrWhiteSpace(termo) &&
+                termo != "Pesquisar bebidas ou lanches..." &&
+                termo.Length >= 3)
             {
                 ProdutoRepositorio repo = new ProdutoRepositorio();
                 var resultados = repo.PesquisarProdutos(termo);
 
                 if (resultados.Count > 0)
                 {
-                    ListSugestoes.ItemsSource = resultados; // Joga os produtos na lista do popup
-                    PopupSugestoes.IsOpen = true;           // Abre a janelinha
+                    ListSugestoes.ItemsSource = resultados;
+                    PopupSugestoes.IsOpen = true;
                 }
                 else
                 {
-                    PopupSugestoes.IsOpen = false;          // Fecha se não achar nada
+                    PopupSugestoes.IsOpen = false;
                 }
             }
             else
@@ -122,28 +128,43 @@ namespace Projeto_DrinksApp
                 PopupSugestoes.IsOpen = false;
             }
         }
-
         //Metodo pra ver detalhes do produto;
         private void ListSugestoes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Verifica se o usuário realmente clicou em algo
+            // Verifica se o item clicado não é nulo
             if (ListSugestoes.SelectedItem is Produto produtoSelecionado)
             {
-                // 1. Preenche a barra de pesquisa com o nome exato do produto
-                Txt_Pesquisa.Text = produtoSelecionado.Nome;
-
-                // 2. Fecha a janelinha de sugestões (o Popup)
+                // 1. Fecha o popup e limpa a seleção para a próxima busca
                 PopupSugestoes.IsOpen = false;
 
-                // 3. Como você ainda não tem a UC_Produtos, vamos mostrar um resumo:
-                MessageBox.Show($"Produto Selecionado: {produtoSelecionado.Nome}\n" +
-                                $"Preço: {produtoSelecionado.Preco:C2}\n\n" +
-                                "Em breve: Tela de detalhes completa!",
-                                "Informações do Produto",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Information);
+                // 2. Transforma o nome em minúsculo para facilitar a comparação
+                string nome = produtoSelecionado.Nome.ToLower();
 
-                // 4. Importante: Reseta a seleção para que o evento possa disparar de novo
+                // 3. Lógica de "GPS" do sistema
+                if (nome.Contains("xis") || nome.Contains("burguer") || nome.Contains("lanche"))
+                {
+                    ConteudoPrincipal.Content = new UC_Lanches();
+                }
+                else if (nome.Contains("brahma") || nome.Contains("chopp")) 
+                {
+                    ConteudoPrincipal.Content = new UC_Cervejas();
+                }
+                else if (nome.Contains("vinho") || nome.Contains("tinto"))
+                {
+                    ConteudoPrincipal.Content = new UC_Vinhos();
+                }
+                else if (nome.Contains("jack") || nome.Contains("daniels") || nome.Contains("whisky"))
+                {
+                    ConteudoPrincipal.Content = new UC_Whisky();
+                }
+
+                // Limpa o texto da pesquisa (opcional)
+                Txt_Pesquisa.Text = string.Empty;
+                //Txt_Pesquisa.Foreground = Brushes.Gray;
+
+                Keyboard.ClearFocus();
+
+                // Tira o foco do ListBox para não ficar marcado
                 ListSugestoes.SelectedItem = null;
             }
         }

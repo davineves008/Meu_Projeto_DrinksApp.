@@ -31,7 +31,11 @@ namespace Projeto_DrinksApp
             InitializeComponent();
 
             // Forçamos a atualização assim que a tela abre
-            CarregarLista();
+            if (App.ClienteLogado != null)
+            {
+                CarregarLista();
+            }
+
         }
 
         public void CarregarLista()
@@ -56,9 +60,6 @@ namespace Projeto_DrinksApp
         }
 
 
-        private void dgpedidos_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
+        
     }
 }
