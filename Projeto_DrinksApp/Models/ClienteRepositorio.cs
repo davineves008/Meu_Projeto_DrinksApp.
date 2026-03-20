@@ -12,12 +12,13 @@ public class ClienteRepositorio
             try
             {
                 conn.Open();
-                // 1. ADICIONADO: c.Senha no SELECT
+                // 1. ADICIONADO: c.nivel no SELECT
                 string query = @"
-                SELECT c.IdCliente, c.nome, c.Senha, c.Email, e.Logradouro, e.Numero, e.Bairro, e.Cidade, e.Estado 
-                FROM Clientes c
-                LEFT JOIN Endereco e ON c.IdCliente = e.IdCliente
-                WHERE c.Usuario = @Usuario AND c.Senha = @Senha";
+            SELECT c.IdCliente, c.nome, c.Senha, c.Email, c.nivel, 
+                   e.Logradouro, e.Numero, e.Bairro, e.Cidade, e.Estado 
+            FROM Clientes c
+            LEFT JOIN Endereco e ON c.IdCliente = e.IdCliente
+            WHERE c.Usuario = @Usuario AND c.Senha = @Senha";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -32,10 +33,11 @@ public class ClienteRepositorio
 
                             cliente.IdCliente = Convert.ToInt32(reader["IdCliente"]);
                             cliente.Nome = reader["nome"]?.ToString();
-
-                            // 2. IMPORTANTE: Agora salvamos a senha no objeto para usar no PIN depois
                             cliente.Senha = reader["Senha"]?.ToString();
                             cliente.Email = reader["Email"]?.ToString();
+
+                            // 2. IMPORTANTE: Captura o nível (0 ou 1) para decidir a tela depois
+                            cliente.Nivel = reader["nivel"] != DBNull.Value ? Convert.ToInt32(reader["nivel"]) : 0;
 
                             if (reader["Logradouro"] != DBNull.Value)
                             {
@@ -53,11 +55,14 @@ public class ClienteRepositorio
                     }
                 }
             }
-            catch (Exception) { return null; }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Erro no Login: " + ex.Message);
+                return null;
+            }
             return null;
         }
     }
-
     // Método de cadastro permanece igual, apenas verifique se a conexão está abrindo corretamente
     public bool CadastrarCompleto(Clientes cliente)
     {

@@ -48,23 +48,25 @@ namespace Projeto_DrinksApp
             var clienteLogado = repo.Login(txtUsuario.Text, txtSenha.Password);
 
             // MUDANÇA AQUI: Em vez de 'if (login)', usamos 'if (clienteLogado != null)'
+            // Supondo que 'clienteLogado' seja o objeto retornado do seu Repositório
             if (clienteLogado != null)
             {
-                // CORREÇÃO: Usamos o objeto 'clienteLogado' que o seu repositório já devolveu.
-                // Não usamos 'reader' aqui porque ele não existe neste contexto.
                 App.ClienteLogado = clienteLogado;
 
-                MessageBox.Show($"Seja bem-vindo, {App.ClienteLogado.Nome}!\nPrepare-se para os melhores drinks.",
-                 "DrinksApp 🍹",
-                 MessageBoxButton.OK,
-                 MessageBoxImage.Information);
+                if (clienteLogado.Nivel == 1)
+                {
+                    // Abre a Dashboard de ADM (com botões de limpar banco, relatórios, etc)
+                    WindowHome admTela = new WindowHome("clienteLogado.Nome");
+                    admTela.Show();
+                }
+                else
+                {
+                    // Abre a Vitrine de Compras normal
+                    MainWindow userTela = new MainWindow();
+                    userTela.Show();
+                }
 
-                // Pegamos o endereço do objeto que acabou de logar
-                string enderecoParaExibir = App.ClienteLogado.EnderecoResidencial?.EnderecoCompleto ?? "Sem endereço";
-
-                WindowHome home = new WindowHome(enderecoParaExibir);
-                home.Show();
-                this.Close();
+                this.Close(); // Fecha a tela de login
             }
             else
             {

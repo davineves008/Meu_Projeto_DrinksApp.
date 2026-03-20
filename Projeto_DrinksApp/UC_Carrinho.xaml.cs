@@ -25,7 +25,7 @@ namespace Projeto_DrinksApp
         {
             InitializeComponent();
             ListaCarrinho.ItemsSource = App.CarrinhoGlobal;
-            
+
             AtualizarTotalGeral();
         }
 
@@ -86,83 +86,93 @@ namespace Projeto_DrinksApp
             Txt_TotalGeral.Text = string.Format("R$ {0:f2}", total);
         }
 
+        //metodo de finalizar a venda;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // 1. Validação inicial (Carrinho vazio)
-            if (App.CarrinhoGlobal == null || App.CarrinhoGlobal.Count == 0)
+            try
             {
-                MessageBox.Show("Seu carrinho está vazio!", "Carrinho Vazio", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            // --- VALIDAÇÃO DO PIN (Senha do Usuário) ---
-            string pinDigitado = Microsoft.VisualBasic.Interaction.InputBox("Confirme sua senha de 4 dígitos para finalizar:", "Segurança do PDV", "");
-
-            // Compara o que foi digitado com a senha do objeto logado
-            if (pinDigitado.Trim() != App.ClienteLogado.Senha.ToString().Trim())
-            {
-                App.ContadorPin++;
-
-                if (App.ContadorPin >= 4)
+                // 1. Validações Iniciais
+                if (App.CarrinhoGlobal == null || App.CarrinhoGlobal.Count == 0)
                 {
-                    MessageBox.Show("Limite de tentativas excedido!", "BLOQUEADO", MessageBoxButton.OK, MessageBoxImage.Error);
-                    // Logout e reset
-                    App.ClienteLogado = null;
-                    App.ContadorPin = 0;
-                    new MainWindow().Show();
-                    Window.GetWindow(this).Close();
+                    MessageBox.Show("O carrinho está vazio!");
                     return;
                 }
-                else
+
+                // 2. Validação de Senha (PIN)
+                string pin = Microsoft.VisualBasic.Interaction.InputBox("Digite sua senha para confirmar:", "Segurança", "");
+                if (string.IsNullOrEmpty(pin)) return;
+
+                if (pin.Trim() != (App.ClienteLogado?.Senha?.ToString().Trim() ?? ""))
                 {
-                    int restantes = 4 - App.ContadorPin;
-                    MessageBox.Show($"Senha Incorreta! Tentativas restantes: {restantes}", "Erro", MessageBoxButton.OK, MessageBoxImage.Hand);
+                    MessageBox.Show("Senha incorreta!");
                     return;
                 }
+
+                // 3. Preparação dos Dados
+                decimal totalVenda = (decimal)App.CarrinhoGlobal.Sum(x => x.PrecoTotal);
+                // Criamos um texto com os nomes dos produtos para aparecer no histórico
+                string resumoProdutos = string.Join(", ", App.CarrinhoGlobal.Select(x => x.Nome));
+
+                if (App.ClienteLogado != null)
+                {
+                    VendaRepositorio repoVenda = new VendaRepositorio();
+                    ProdutoRepositorio repoProd = new ProdutoRepositorio();
+                    PedidoRepositorio repoPed = new PedidoRepositorio(); // Repositório do Histórico
+
+                    // 4. Salva a Venda Financeira
+                    bool salvouVenda = repoVenda.SalvarVenda(App.ClienteLogado.IdCliente, App.CarrinhoGlobal.Count, totalVenda);
+
+                    if (salvouVenda)
+                    {
+                        // 5. Loop para Baixar Estoque e Identificar IDs
+                        foreach (var item in App.CarrinhoGlobal)
+                        {
+                            int idReal = item.IdProduto;
+
+                            // Correção manual se o ID estiver vindo 0 da tela
+                            if (idReal <= 0)
+                            {
+                                switch (item.Nome)
+                                {
+                                    case "Brahma Duplo Malte": idReal = 101; break;
+                                    case "Jack Daniels": idReal = 102; break;
+                                    case "Xis Burguer": idReal = 103; break;
+                                    case "Vinho Tinto": idReal = 104; break;
+                                }
+                            }
+
+                            // Baixa o estoque no banco
+                            repoProd.BaixarEstoque(idReal, item.Quantidade);
+                        }
+
+                        // 6. GRAVAR NO HISTÓRICO (Para aparecer nos "Últimos Pedidos")
+                        Pedido novoPedido = new Pedido
+                        {
+                            ValorTotal = totalVenda,
+                            Observacoes = resumoProdutos // Aqui fica o texto: "Brahma, Vinho Tinto..."
+                        };
+
+                        // Salva na tabela de pedidos vinculada ao ID do cliente logado
+                        repoPed.InserirPedido(novoPedido, App.ClienteLogado.IdCliente);
+
+                        // 7. Atualiza o objeto do cliente na memória para o Perfil atualizar sem precisar deslogar
+                        App.ClienteLogado.UltimoPedidoDescricao = resumoProdutos;
+                        App.ClienteLogado.UltimoPedidoValor = totalVenda;
+                        App.ClienteLogado.UltimoPedidoData = DateTime.Now;
+
+                        MessageBox.Show($"Pedido finalizado!\nTotal: {totalVenda:C2}\nEstoque e Histórico atualizados.");
+
+                        // 8. Limpa e Reseta
+                        App.CarrinhoGlobal.Clear();
+                        FinalizarEResetarCarrinho();
+                    }
+                }
             }
-
-            // SE CHEGOU AQUI, A SENHA ESTÁ CORRETA!
-            App.ContadorPin = 0;
-
-           
-
-            // 2. Fluxo de Venda (CPF e Banco de Dados)
-            MessageBoxResult resultadoCpf = MessageBox.Show("Deseja informar o CPF?", "CPF", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            // 1. Primeiro, preparamos os dados do carrinho
-            decimal totalVenda = (decimal)App.CarrinhoGlobal.Sum(x => x.PrecoTotal);
-            string resumoFinal = string.Join(", ", App.CarrinhoGlobal.Select(x => x.Nome));
-            int quantidadeDeItens = App.CarrinhoGlobal.Count; // O número que o banco espera
-
-            if (App.ClienteLogado != null)
+            catch (Exception ex)
             {
-                // 2. Gravando na tabela de Vendas (Repositorio que criamos por último)
-                VendaRepositorio repoVenda = new VendaRepositorio();
-                // IMPORTANTE: Passamos 'quantidadeDeItens' (int) e não a string!
-                bool salvou = repoVenda.SalvarVenda(App.ClienteLogado.IdCliente, quantidadeDeItens, totalVenda);
-
-                // 3. Gravando na tabela de Pedidos (Para o histórico neon aparecer)
-                PedidoRepositorio repoPed = new PedidoRepositorio();
-                Pedido p = new Pedido();
-                p.ValorTotal = totalVenda;
-                p.Observacoes = resumoFinal; // Aqui salvamos os nomes dos produtos para o cliente ler
-
-                repoPed.InserirPedido(p, App.ClienteLogado.IdCliente);
-
-                // 4. Atualiza a memória para o perfil
-                App.ClienteLogado.UltimoPedidoDescricao = resumoFinal;
-                App.ClienteLogado.UltimoPedidoValor = totalVenda;
-                App.ClienteLogado.UltimoPedidoData = DateTime.Now;
-
-                MessageBox.Show("Venda finalizada com sucesso!");
+                MessageBox.Show("Erro ao finalizar: " + ex.Message);
             }
-            App.CarrinhoGlobal.Clear();
-
-            // Método que você já tem para atualizar a lista da tela
-            FinalizarEResetarCarrinho();
         }
-
-
         //metodo que reseta e limpa o carrinho;
         private void FinalizarEResetarCarrinho()
         {

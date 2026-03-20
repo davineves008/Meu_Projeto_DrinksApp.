@@ -15,7 +15,7 @@ namespace Projeto_DrinksApp.Models
 
         public string CPF { get; set; }
 
-   
+        public int Nivel { get; set; } // 0 = User, 1 = Admin
         public string Senha { get; set; }
         public string  Usuario { get; set; }
 

@@ -4,12 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="700"
+             d:DesignHeight="700" d:DesignWidth="700"
              Background="Transparent">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="30">
-            <TextBlock Text="Meu Perfil" FontSize="26" FontWeight="Bold" Foreground="White" Margin="0,0,0,5"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,5">
+                <TextBlock Text="Meu Perfil" FontSize="26" FontWeight="Bold" Foreground="White"/>
+
+                <Border x:Name="borderNivel" Margin="15,0,0,0" Padding="10,2" CornerRadius="10" VerticalAlignment="Center" BorderThickness="1">
+                    <TextBlock x:Name="txtNivelUsuario" Text="CARREGANDO..." FontSize="10" FontWeight="Black" Foreground="White"/>
+                </Border>
+            </StackPanel>
+
             <TextBlock Text="Gerencie suas informações e histórico de pedidos." Foreground="#88FFFFFF" Margin="0,0,0,25"/>
 
             <Separator Height="1" Background="#33FFFFFF" Margin="0,0,0,25"/>
@@ -19,12 +26,12 @@
             <UniformGrid Columns="2" Margin="0,0,0,20">
                 <StackPanel Margin="5">
                     <TextBlock Text="Nome Completo" Foreground="#88FFFFFF" FontSize="11" Margin="5,0,0,3"/>
-                    <TextBox x:Name="txtNome" Text="João Silva" Background="#22FFFFFF" Foreground="White" BorderThickness="1" BorderBrush="#44FFFFFF" Padding="8" Height="35"/>
+                    <TextBox x:Name="txtNome" Background="#22FFFFFF" Foreground="White" BorderThickness="1" BorderBrush="#44FFFFFF" Padding="8" Height="35"/>
                 </StackPanel>
 
                 <StackPanel Margin="5">
                     <TextBlock Text="E-mail" Foreground="#88FFFFFF" FontSize="11" Margin="5,0,0,3"/>
-                    <TextBox x:Name="txtEmail" Text="joao@exemplo.com" Background="#22FFFFFF" Foreground="White" BorderThickness="1" BorderBrush="#44FFFFFF" Padding="8" Height="35"/>
+                    <TextBox x:Name="txtEmail" Background="#22FFFFFF" Foreground="White" BorderThickness="1" BorderBrush="#44FFFFFF" Padding="8" Height="35"/>
                 </StackPanel>
             </UniformGrid>
 
@@ -35,18 +42,15 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
 
                 <StackPanel Grid.Column="0" Margin="5">
                     <TextBlock Text="Logradouro (Rua, Av.)" Foreground="#88FFFFFF" FontSize="11" Margin="5,0,0,3"/>
-                    <TextBox x:Name="txtEndereco" Text="Rua das Flores, 123" Background="#22FFFFFF" Foreground="White" BorderThickness="1" BorderBrush="#44FFFFFF" Padding="8" Height="35"/>
+                    <TextBox x:Name="txtEndereco" Background="#22FFFFFF" Foreground="White" BorderThickness="1" BorderBrush="#44FFFFFF" Padding="8" Height="35"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="5">
                     <TextBlock Text="Cidade" Foreground="#88FFFFFF" FontSize="11" Margin="5,0,0,3"/>
-                    <TextBox x:Name="txtCidade" Text="Taquara" Background="#22FFFFFF" Foreground="White" BorderThickness="1" BorderBrush="#44FFFFFF" Padding="8" Height="35"/>
+                    <TextBox x:Name="txtCidade" Background="#22FFFFFF" Foreground="White" BorderThickness="1" BorderBrush="#44FFFFFF" Padding="8" Height="35"/>
                 </StackPanel>
             </Grid>
 
@@ -57,38 +61,36 @@
             <Border Background="#11FFFFFF" CornerRadius="8" Padding="15" BorderBrush="#22FFFFFF" BorderThickness="1">
                 <Grid>
                     <StackPanel>
-                        <TextBlock x:Name="lblUltimoPedido" 
-                       Text="Nenhum pedido recente" 
-                       Foreground="White" 
-                       FontWeight="Medium" 
-                       FontSize="14"/>
-
-                        <TextBlock x:Name="txtDataPedido" 
-                       Text="Entregue em: --/--/----" 
-                       Foreground="#66FFFFFF" 
-                       FontSize="11" 
-                       Margin="0,5,0,0"/>
+                        <TextBlock x:Name="lblUltimoPedido" Text="Nenhum pedido recente" Foreground="White" FontWeight="Medium" FontSize="14"/>
+                        <TextBlock x:Name="txtDataPedido" Text="Entregue em: --/--/----" Foreground="#66FFFFFF" FontSize="11" Margin="0,5,0,0"/>
                     </StackPanel>
 
-                    <TextBlock x:Name="txtValorPedido" 
-                   Text="R$ 0,00" 
-                   HorizontalAlignment="Right" 
-                   VerticalAlignment="Center" 
-                   Foreground="#FF00F9FF" 
-                   FontSize="18" 
-                   FontWeight="Bold"/>
+                    <TextBlock x:Name="txtValorPedido" Text="R$ 0,00" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="#FF00F9FF" FontSize="18" FontWeight="Bold"/>
                 </Grid>
             </Border>
 
-            <Button x:Name="btnSalvarPerfil" Content="Salvar Alterações" Click="btnSalvarPerfil_Click"
-                    Background="#FF00F9FF" Foreground="Black" FontWeight="Bold"
-                    Width="180" Height="42" HorizontalAlignment="Right" Margin="0,35,0,0" Cursor="Hand">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="21"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,35,0,0">
+
+                <Button x:Name="btnAdminArea" Content="PAINEL DE CONTROLE ADM" Click="btnAdminArea_Click"
+                        Visibility="Collapsed" Background="#FFFFD700" Foreground="Black" FontWeight="Black"
+                        Width="220" Height="42" Margin="0,0,15,0" Cursor="Hand">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="21"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <Button x:Name="btnSalvarPerfil" Content="Salvar Alterações" Click="btnSalvarPerfil_Click"
+                        Background="#FF00F9FF" Foreground="Black" FontWeight="Bold"
+                        Width="180" Height="42" Cursor="Hand">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="21"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

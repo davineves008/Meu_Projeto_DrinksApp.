@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Projeto_DrinksApp.Models
 {
@@ -41,18 +42,23 @@ namespace Projeto_DrinksApp.Models
             return lista;
         }
 
-        public void ExcluirProdutoDoBanco(int produtoId)
+        public void BaixarEstoque(int produtoId, int quantidadeVendida)
         {
+            string strCon = @"Server=TQR216785\SQLEXPRESS;Database=DrinkApps;User Id=tds;Password=tds123;TrustServerCertificate=True";
+
             using (SqlConnection conn = new SqlConnection(strCon))
             {
-                // Query para deletar o produto pelo ID
-                string sql = "DELETE FROM Produtos WHERE Id = @id";
+                // AJUSTADO: 'estoque' e 'idproduto' conforme sua imagem aabeb6
+                string sql = "UPDATE Produtos SET estoque = estoque - @qtd WHERE idproduto = @id";
+
                 SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@qtd", quantidadeVendida);
                 cmd.Parameters.AddWithValue("@id", produtoId);
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
         }
+
     }
 }

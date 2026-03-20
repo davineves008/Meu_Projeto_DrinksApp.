@@ -24,7 +24,7 @@ namespace Projeto_DrinksApp
         public UC_Perfil()
         {
             InitializeComponent();
-            CarregarDadosDoUsuario();
+            CarregarPerfil();
           
         }
         //btn Salvar as alterações editadas.
@@ -52,36 +52,51 @@ namespace Projeto_DrinksApp
                 }
             }
         }
-        private void CarregarDadosDoUsuario()
+        private void CarregarPerfil()
         {
-            // Verifica se existe alguém logado para não dar erro de referência nula
             if (App.ClienteLogado != null)
             {
+                // Preenche campos de texto (Garante que não apareça o nome da variável como na imagem a8045a)
                 txtNome.Text = App.ClienteLogado.Nome;
                 txtEmail.Text = App.ClienteLogado.Email;
 
-
-                // Como você mencionou que tem a classe Endereço ligada:
                 if (App.ClienteLogado.EnderecoResidencial != null)
                 {
                     txtEndereco.Text = App.ClienteLogado.EnderecoResidencial.Logradouro;
                     txtCidade.Text = App.ClienteLogado.EnderecoResidencial.Cidade;
                 }
-                // Preenche a área de "Último Pedido Realizado"
-                if (!string.IsNullOrEmpty(App.ClienteLogado.UltimoPedidoDescricao))
-                {
-                    lblUltimoPedido.Text = App.ClienteLogado.UltimoPedidoDescricao;
 
-                    // Supondo que você tenha esses nomes no seu XAML:
-                    txtDataPedido.Text = $"Entregue em: {App.ClienteLogado.UltimoPedidoData?.ToString("dd/MM/yyyy")}";
-                    txtValorPedido.Text = App.ClienteLogado.UltimoPedidoValor.ToString("C2"); // Formato R$
+                // Lógica de Nível e Visibilidade do Botão ADM
+                if (App.ClienteLogado.Nivel == 1)
+                {
+                    txtNivelUsuario.Text = "ADMINISTRADOR";
+                    borderNivel.Background = new SolidColorBrush(Color.FromArgb(40, 255, 215, 0)); // Dourado suave
+                    borderNivel.BorderBrush = Brushes.Gold;
+
+                    // Torna o botão de Painel visível apenas para ADM
+                    btnAdminArea.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    lblUltimoPedido.Text = "Nenhum pedido realizado ainda.";
+                    txtNivelUsuario.Text = "CLIENTE";
+                    borderNivel.Background = new SolidColorBrush(Color.FromArgb(40, 0, 249, 255)); // Ciano suave
+                    borderNivel.BorderBrush = new SolidColorBrush(Color.FromRgb(0, 249, 255));
+
+                    btnAdminArea.Visibility = Visibility.Collapsed;
                 }
+
+                // Dados do Último Pedido
+                lblUltimoPedido.Text = App.ClienteLogado.UltimoPedidoDescricao ?? "Nenhum pedido recente";
+                txtValorPedido.Text = App.ClienteLogado.UltimoPedidoValor.ToString("C2");
+                txtDataPedido.Text = "Última atualização: " + DateTime.Now.ToString("dd/MM/yyyy");
             }
         }
 
+        private void btnAdminArea_Click(object sender, RoutedEventArgs e)
+        {
+            // Abre a tela de Administrador passando o nome do ADM logado
+            WindowHome admWin = new WindowHome(App.ClienteLogado.Nome);
+            admWin.Show();
+        }
     }
 }

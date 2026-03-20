@@ -24,7 +24,7 @@ namespace Projeto_DrinksApp
     {
         //referencia estatica pra propria janela;
         public static WindowHome Instancia;
-        public WindowHome(string enderecoCliente)
+        public WindowHome(string enderecoCliente = "")
         {
             InitializeComponent();
 
