@@ -129,7 +129,7 @@
                 <Image Height="25" Width="30" Source="/do-utilizador.png"/>
                 <Image Height="26" Width="30" Source="/localizacao.png" Margin="15,0,5,0"/>
                 <TextBox x:Name="Txt_Endereco" 
-         Text="Carregando endereço..." 
+         Text="" 
          Width="180" 
          Background="Transparent" 
          Foreground="#FF00F9FF" 

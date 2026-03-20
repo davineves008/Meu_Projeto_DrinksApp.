@@ -25,12 +25,14 @@ namespace Projeto_DrinksApp
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
+            // 1. Captura as entradas do usuário
             string Usuario = txtUsuario.Text;
             string senha = txtSenha.Password;
 
+            // 2. Validações básicas de campos vazios
             if (string.IsNullOrWhiteSpace(Usuario))
             {
-                MessageBox.Show("Digite o Usuario!");
+                MessageBox.Show("Digite o Usuário!");
                 txtUsuario.Focus();
                 return;
             }
@@ -38,43 +40,59 @@ namespace Projeto_DrinksApp
             if (string.IsNullOrWhiteSpace(senha))
             {
                 MessageBox.Show("Digite a senha!");
+                txtSenha.Password = ""; // Limpa a senha se estiver apenas com espaços
                 txtSenha.Focus();
                 return;
             }
 
-            ClienteRepositorio repo = new ClienteRepositorio();
-
-            // Chamamos o método que agora retorna o objeto completo
-            var clienteLogado = repo.Login(txtUsuario.Text, txtSenha.Password);
-
-            // MUDANÇA AQUI: Em vez de 'if (login)', usamos 'if (clienteLogado != null)'
-            // Supondo que 'clienteLogado' seja o objeto retornado do seu Repositório
-            if (clienteLogado != null)
+            try
             {
-                App.ClienteLogado = clienteLogado;
+                // 3. Tenta realizar o login no Banco de Dados
+                ClienteRepositorio repo = new ClienteRepositorio();
+                var clienteLogado = repo.Login(Usuario, senha);
 
-                if (clienteLogado.Nivel == 1)
+                if (clienteLogado != null)
                 {
-                    // Abre a Dashboard de ADM (com botões de limpar banco, relatórios, etc)
-                    WindowHome admTela = new WindowHome("clienteLogado.Nome");
-                    admTela.Show();
+                    // 4. Salva o objeto na variável global para ser usado em todo o App
+                    App.ClienteLogado = clienteLogado;
+
+                    // 5. Monta a string de endereço para exibir no topo da WindowHome
+                    string infoParaTopo = "";
+
+                    if (clienteLogado.EnderecoResidencial != null)
+                    {
+                        // Formato: "Rua Exemplo, 123"
+                        infoParaTopo = $"{clienteLogado.EnderecoResidencial.Logradouro}, {clienteLogado.EnderecoResidencial.Numero}";
+                    }
+                    else
+                    {
+                        // Se o endereço for nulo no banco, usamos o Nome como fallback
+                        infoParaTopo = clienteLogado.Nome;
+                    }
+
+                    // 6. Abre a janela principal (WindowHome) passando o endereço formatado
+                    // Sem aspas em clienteLogado.Nome para evitar o erro das imagens anteriores
+                    WindowHome home = new WindowHome(infoParaTopo);
+                    home.Show();
+
+                    // 7. Fecha a tela de login
+                    this.Close();
                 }
                 else
                 {
-                    // Abre a Vitrine de Compras normal
-                    MainWindow userTela = new MainWindow();
-                    userTela.Show();
+                    // Caso o login falhe (Usuário ou senha não encontrados)
+                    MessageBox.Show("Usuário ou senha inválidos!", "Erro de Acesso", MessageBoxButton.OK, MessageBoxImage.Error);
+                    txtSenha.Clear();
+                    txtSenha.Focus();
                 }
-
-                this.Close(); // Fecha a tela de login
             }
-            else
+            catch (Exception ex)
             {
-                // Se cair aqui, é porque o SELECT não trouxe nenhum registro (usuário ou senha errados)
-                MessageBox.Show("Usuário ou senha inválidos!");
+                // Caso haja algum erro de conexão com o Banco de Dados
+                MessageBox.Show("Erro ao conectar com o banco de dados: " + ex.Message);
             }
         }
-
+        //
         private void BtnCadastro_Click(object sender, RoutedEventArgs e)
         {
             TelaDeCadastro cadastro = new TelaDeCadastro();

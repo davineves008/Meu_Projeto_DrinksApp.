@@ -56,42 +56,32 @@ namespace Projeto_DrinksApp
         {
             if (App.ClienteLogado != null)
             {
-                // Preenche campos de texto (Garante que não apareça o nome da variável como na imagem a8045a)
-                txtNome.Text = App.ClienteLogado.Nome;
-                txtEmail.Text = App.ClienteLogado.Email;
-
+                // 1. COLOCA O ENDEREÇO NO TOPO (No lugar do texto verde da imagem a8045a)
                 if (App.ClienteLogado.EnderecoResidencial != null)
                 {
-                    txtEndereco.Text = App.ClienteLogado.EnderecoResidencial.Logradouro;
-                    txtCidade.Text = App.ClienteLogado.EnderecoResidencial.Cidade;
-                }
-
-                // Lógica de Nível e Visibilidade do Botão ADM
-                if (App.ClienteLogado.Nivel == 1)
-                {
-                    txtNivelUsuario.Text = "ADMINISTRADOR";
-                    borderNivel.Background = new SolidColorBrush(Color.FromArgb(40, 255, 215, 0)); // Dourado suave
-                    borderNivel.BorderBrush = Brushes.Gold;
-
-                    // Torna o botão de Painel visível apenas para ADM
-                    btnAdminArea.Visibility = Visibility.Visible;
+                    // Exibe: Rua Tal, 123 - Cidade
+                    txtEndereco.Text = $"{App.ClienteLogado.EnderecoResidencial.Logradouro}, {App.ClienteLogado.EnderecoResidencial.Numero}";
                 }
                 else
                 {
-                    txtNivelUsuario.Text = "CLIENTE";
-                    borderNivel.Background = new SolidColorBrush(Color.FromArgb(40, 0, 249, 255)); // Ciano suave
-                    borderNivel.BorderBrush = new SolidColorBrush(Color.FromRgb(0, 249, 255));
-
-                    btnAdminArea.Visibility = Visibility.Collapsed;
+                    txtEndereco.Text = "Endereço não cadastrado";
                 }
 
-                // Dados do Último Pedido
-                lblUltimoPedido.Text = App.ClienteLogado.UltimoPedidoDescricao ?? "Nenhum pedido recente";
-                txtValorPedido.Text = App.ClienteLogado.UltimoPedidoValor.ToString("C2");
-                txtDataPedido.Text = "Última atualização: " + DateTime.Now.ToString("dd/MM/yyyy");
+                // 2. Preenche os campos do formulário normalmente
+                txtNome.Text = App.ClienteLogado.Nome;
+                txtEmail.Text = App.ClienteLogado.Email;
+                txtCidade.Text = App.ClienteLogado.EnderecoResidencial?.Cidade;
+                txtEndereco.Text = App.ClienteLogado.EnderecoResidencial?.Logradouro;
+
+                // 3. Lógica do Nível (Badge e Botão ADM)
+                if (App.ClienteLogado.Nivel == 1)
+                {
+                    txtNivelUsuario.Text = "ADMINISTRADOR";
+                    btnAdminArea.Visibility = Visibility.Visible;
+                    borderNivel.BorderBrush = Brushes.Gold;
+                }
             }
         }
-
         private void btnAdminArea_Click(object sender, RoutedEventArgs e)
         {
             // Abre a tela de Administrador passando o nome do ADM logado
