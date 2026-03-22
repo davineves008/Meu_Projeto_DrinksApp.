@@ -27,17 +27,28 @@ namespace Projeto_DrinksApp
         }
 
         //Btn pra cadastro
-        
+
         //btn_Voltar;
         private void BtnVoltar_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-       //btn pra cadastra cliente e endereço
-        public  void BtnCadastrar_Click(object sender, RoutedEventArgs e)
+        //btn pra cadastra cliente e endereço
+        public void BtnCadastrar_Click(object sender, RoutedEventArgs e)
         {
-            // Criamos o objeto cliente com os dados da tela
+            // 1. Validação simples
+            if (string.IsNullOrWhiteSpace(txtNome.Text) || string.IsNullOrWhiteSpace(txtUsuario.Text))
+            {
+                MessageBox.Show("Por favor, preencha os campos obrigatórios.");
+                return;
+            }
+
+            // 2. Lógica para converter a seleção do ComboBox em número (int)
+            // Se o texto selecionado for "ADM", nivel = 1, caso contrário nivel = 0
+            int nivelSelecionado = cbNivel.Text == "ADM" ? 1 : 0;
+
+            // 3. Criamos o objeto cliente com os dados da tela
             Clientes novoCliente = new Clientes()
             {
                 Nome = txtNome.Text,
@@ -45,6 +56,7 @@ namespace Projeto_DrinksApp
                 Usuario = txtUsuario.Text,
                 Senha = txtSenha.Password,
                 CPF = txtCPF.Text,
+                Nivel = nivelSelecionado, // Atribuindo o nível aqui
                 EnderecoResidencial = new Endereço()
                 {
                     Logradouro = txtLogradouro.Text,
@@ -56,10 +68,12 @@ namespace Projeto_DrinksApp
                 }
             };
 
+            // 4. Chamada do repositório
             ClienteRepositorio repo = new ClienteRepositorio();
+
             if (repo.CadastrarCompleto(novoCliente))
             {
-                MessageBox.Show("Cadastro realizado com sucesso!");
+                MessageBox.Show("Cadastro realizado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
             }
         }

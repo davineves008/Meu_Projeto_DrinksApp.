@@ -66,59 +66,41 @@ public class ClienteRepositorio
     // Método de cadastro permanece igual, apenas verifique se a conexão está abrindo corretamente
     public bool CadastrarCompleto(Clientes cliente)
     {
-        using (SqlConnection conn = Conexao.GetConnection())
-        {
-            conn.Open();
-            SqlTransaction transacao = conn.BeginTransaction();
+        string connString = @"Server=TQR216785\SQLEXPRESS;Database=DrinkApps;User Id=tds;Password=tds123;";
 
+        using (SqlConnection conn = new SqlConnection(connString))
+        {
             try
             {
-                // 1. Inserir o Cliente e pegar o ID gerado
-                string queryCliente = @"
-                INSERT INTO Clientes (nome, email, cidade, cpf, Senha, Usuario) 
-                VALUES (@nome, @email, @cidade, @cpf, @Senha, @Usuario);
-                SELECT SCOPE_IDENTITY();"; // Pega o ID gerado agora
+                conn.Open();
+                // Adicionei o campo 'nivel' na query SQL
+                string query = @"INSERT INTO usuarios (nome, email, cpf, usuario, senha, nivel, logradouro, numero, bairro, cidade, estado, cep) 
+                             VALUES (@nome, @email, @cpf, @usuario, @senha, @nivel, @log, @num, @bairro, @cid, @est, @cep)";
 
-                int novoIdCliente;
-                using (SqlCommand cmd = new SqlCommand(queryCliente, conn, transacao))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@nome", cliente.Nome);
                     cmd.Parameters.AddWithValue("@email", cliente.Email);
-                    cmd.Parameters.AddWithValue("@cidade", cliente.EnderecoResidencial.Cidade);
                     cmd.Parameters.AddWithValue("@cpf", cliente.CPF);
-                    cmd.Parameters.AddWithValue("@Senha", cliente.Senha);
-                    cmd.Parameters.AddWithValue("@Usuario", cliente.Usuario);
+                    cmd.Parameters.AddWithValue("@usuario", cliente.Usuario);
+                    cmd.Parameters.AddWithValue("@senha", cliente.Senha);
+                    cmd.Parameters.AddWithValue("@nivel", cliente.Nivel); // Gravando o nível
 
-                    novoIdCliente = Convert.ToInt32(cmd.ExecuteScalar());
+                    // Endereço
+                    cmd.Parameters.AddWithValue("@log", cliente.EnderecoResidencial.Logradouro);
+                    cmd.Parameters.AddWithValue("@num", cliente.EnderecoResidencial.Numero);
+                    cmd.Parameters.AddWithValue("@bairro", cliente.EnderecoResidencial.Bairro);
+                    cmd.Parameters.AddWithValue("@cid", cliente.EnderecoResidencial.Cidade);
+                    cmd.Parameters.AddWithValue("@est", cliente.EnderecoResidencial.Estado);
+                    cmd.Parameters.AddWithValue("@cep", cliente.EnderecoResidencial.Cep);
+
+                    cmd.ExecuteNonQuery();
+                    return true;
                 }
-
-                // 2. Inserir o Endereço usando o ID recuperado
-                string queryEndereco = @"
-                INSERT INTO Endereco (idcliente, logradouro, numero, complemento, bairro, cidade, estado, cep)
-                VALUES (@idid, @log, @num, @comp, @bair, @cid, @est, @cep)";
-
-                using (SqlCommand cmdEnd = new SqlCommand(queryEndereco, conn, transacao))
-                {
-                    var e = cliente.EnderecoResidencial;
-                    cmdEnd.Parameters.AddWithValue("@idid", novoIdCliente);
-                    cmdEnd.Parameters.AddWithValue("@log", e.Logradouro);
-                    cmdEnd.Parameters.AddWithValue("@num", e.Numero);
-                    cmdEnd.Parameters.AddWithValue("@comp", e.Complemento ?? (object)DBNull.Value);
-                    cmdEnd.Parameters.AddWithValue("@bair", e.Bairro);
-                    cmdEnd.Parameters.AddWithValue("@cid", e.Cidade);
-                    cmdEnd.Parameters.AddWithValue("@est", e.Estado);
-                    cmdEnd.Parameters.AddWithValue("@cep", e.Cep);
-
-                    cmdEnd.ExecuteNonQuery();
-                }
-
-                transacao.Commit(); // Salva tudo no banco
-                return true;
             }
             catch (Exception ex)
             {
-                transacao.Rollback(); // Cancela tudo se der erro
-                System.Windows.MessageBox.Show("Erro ao cadastrar: " + ex.Message);
+                MessageBox.Show("Erro no banco: " + ex.Message);
                 return false;
             }
         }

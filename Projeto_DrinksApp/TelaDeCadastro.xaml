@@ -79,7 +79,24 @@
                         <Border CornerRadius="8" BorderBrush="White" BorderThickness="1" Margin="0,5,0,10">
                             <PasswordBox x:Name="txtSenha" Background="Transparent" Foreground="White" BorderThickness="0" Padding="5"/>
                         </Border>
+
+                        <TextBlock Text="Nível de Acesso" Foreground="White" Margin="0,5,0,0"/>
+                        <Border CornerRadius="8" BorderBrush="White" BorderThickness="1" Margin="0,5,0,10">
+                            <ComboBox x:Name="cbNivel" 
+              Background="Transparent" 
+              Foreground="Black" 
+              BorderThickness="0" 
+              Padding="5" 
+              VerticalContentAlignment="Center">
+
+                                <ComboBoxItem Content="Usuario" IsSelected="True" Foreground="Black"/>
+                                <ComboBoxItem Content="ADM" Foreground="Black"/>
+                            </ComboBox>
+                        </Border>
+
                     </StackPanel>
+                    
+                    
 
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="Logradouro (Rua)" Foreground="White"/>
