@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Projeto_DrinksApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Projeto_DrinksApp;
 
 namespace Projeto_DrinksApp
 {
@@ -23,8 +25,32 @@ namespace Projeto_DrinksApp
         public UC_Config()
         {
             InitializeComponent();
+            VerificarAcessoAdm();
         }
 
+        //Metodo que verificaquem esta logado;
+        private void VerificarAcessoAdm()
+        {
+            // Verificamos se o nível é IGUAL a 1 (int) e não ao texto "ADM"
+            if (WindowHome.Instancia?.Usuariologado != null &&
+                WindowHome.Instancia.Usuariologado.Nivel == 1)
+            {
+                btnCriarProduto.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                btnCriarProduto.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void btnCriarProduto_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowHome.Instancia != null)
+            {
+                // Isso remove a UC_Config e coloca a Uc_CriarProduto no lugar
+                WindowHome.Instancia.ConteudoPrincipal.Content = new Uc_CriarProduto();
+            }
+        }
         //Btn pra tela de interfaces;
         private void BtnGoInterface_Click(object sender, RoutedEventArgs e)
         {

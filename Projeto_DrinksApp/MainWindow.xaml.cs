@@ -21,6 +21,7 @@ namespace Projeto_DrinksApp
         public MainWindow()
         {
             InitializeComponent();
+
         }
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)

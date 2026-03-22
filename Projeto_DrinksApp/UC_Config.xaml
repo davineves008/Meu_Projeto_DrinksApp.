@@ -3,9 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="700"
-             Background="Transparent">
+             mc:Ignorable="d" d:DesignWidth="700"
+             Background="Transparent" Height="532">
     <StackPanel Margin="40">
         <TextBlock Text="Configurações" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
         <TextBlock Text="Escolha uma categoria para ajustar o seu DrinksApp." Foreground="#88FFFFFF" Margin="0,0,0,30"/>
@@ -39,6 +38,17 @@
                     <Path Data="M12,12H19C18.47,16.11 15.72,19.78 12,20.93V12H5V6.3L12,3.19M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z" 
               Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
                     <TextBlock Text="Segurança e Dados" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+
+            <Button x:Name="btnCriarProduto" 
+        Click="btnCriarProduto_Click" 
+        Visibility="Visible"
+        Margin="10" Height="100" Background="#22FFD700" BorderBrush="#AAFFD700" BorderThickness="1" Cursor="Hand">
+                <StackPanel>
+                    <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" 
+              Fill="#FFFFD700" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
+                    <TextBlock Text="Cadastrar Produtos (ADM)" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Button>
 

@@ -19,6 +19,8 @@ namespace Projeto_DrinksApp
 {
     public partial class WindowHome : Window
     {
+        public Clientes Usuariologado { get; set; }
+
         public static WindowHome Instancia;
 
         // AJUSTE AQUI: O construtor agora aceita o nome ou endereço
