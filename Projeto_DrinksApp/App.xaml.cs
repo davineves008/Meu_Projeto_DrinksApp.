@@ -13,6 +13,8 @@ namespace Projeto_DrinksApp
     public partial class App : Application
     {
 
+
+
         //linha de conexao com o sql pra venda produto;
         public static string LinhaConexao = @"Server=TQR216785\SQLEXPRESS;Database=DrinkApps;User Id=tds;Password=tds123;";
 

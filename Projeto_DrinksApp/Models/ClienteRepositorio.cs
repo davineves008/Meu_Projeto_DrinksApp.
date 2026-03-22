@@ -125,7 +125,7 @@ public class ClienteRepositorio
     }
 
 
-    //quando edito os dados pela tela de perfil ele ataualiza no banco de dados.
+    //quando edito os dados pela tela de perfil ele atualiza no banco de dados.
     public bool AtualizarCliente(int id, string nome, string email)
     {
         using (SqlConnection conn = Conexao.GetConnection())
@@ -144,6 +144,65 @@ public class ClienteRepositorio
             catch (Exception ex)
             {
                 MessageBox.Show("Erro ao atualizar banco: " + ex.Message);
+                return false;
+            }
+        }
+    }
+
+    //Metodo pra excluir o cliente pelo id.
+
+    public bool ExcluirConta(int idCliente)
+    {
+        using (SqlConnection conn = Conexao.GetConnection())
+        {
+            try
+            {
+                conn.Open();
+
+                // A ORDEM IMPORTA: 
+                // 1º Deleta os Pedidos (tabela dependente)
+                // 2º Deleta o Endereço (tabela dependente)
+                // 3º Deleta o Cliente (tabela principal)
+                string sql = @"
+                DELETE FROM Pedidos WHERE IdCliente = @id;
+                DELETE FROM Endereco WHERE IdCliente = @id;
+                DELETE FROM Clientes WHERE IdCliente = @id;";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", idCliente);
+
+                    // O ExecuteNonQuery retorna o número de linhas afetadas.
+                    // Como deletamos de várias tabelas, ele deve ser maior que 0.
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Erro ao limpar dados e excluir conta: " + ex.Message);
+                return false;
+            }
+        }
+    }
+    // Metodo pra atualizar a senha pela UC_Segurança.
+    public bool AtualizarSenha(int id, string novaSenha)
+    {
+        using (SqlConnection conn = Conexao.GetConnection())
+        {
+            try
+            {
+                conn.Open();
+                string query = "UPDATE Clientes SET Senha = @senha WHERE IdCliente = @id";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@senha", novaSenha);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao atualizar senha: " + ex.Message);
                 return false;
             }
         }

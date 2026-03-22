@@ -47,28 +47,34 @@ namespace Projeto_DrinksApp
         }
 
         // Evento dos RadioButtons
-        private void rbTema_Checked(object sender, RoutedEventArgs e)
-        {
-            // Verifica se os componentes já foram inicializados
-            if (rbEscuro == null || rbClaro == null) return;
-
-            AplicarTema(rbEscuro.IsChecked == true);
-        }
-
-        // 2. Método para os botões de cores de destaque
         private void btnColor_Click(object sender, RoutedEventArgs e)
         {
-            Button btnClicado = sender as Button;
-            if (btnClicado != null)
-            {
-                // Pega a cor do botão que você clicou
-                Brush corSelecionada = btnClicado.Background;
+            // 1. Identifica qual cor foi clicada
+            Button btn = (Button)sender;
+            SolidColorBrush novaCor = (SolidColorBrush)btn.Background;
 
-                // Aplica ao botão "Salvar Alterações" para dar feedback
-                btnSalvar.Background = corSelecionada;
-            }
+            // 2. Altera o recurso no dicionário da aplicação
+            // Isso atualiza AUTOMATICAMENTE todas as janelas que usam DynamicResource
+            Application.Current.Resources["CorDestaqueDinamica"] = novaCor;
         }
 
+        private void rbTema_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!IsLoaded) return;
+
+            if (rbEscuro.IsChecked == true)
+            {
+                // Tema Escuro
+                Application.Current.Resources["CorFundoDinamica"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#121212"));
+                Application.Current.Resources["CorTextoDinamica"] = new SolidColorBrush(Colors.White);
+            }
+            else
+            {
+                // Tema Claro
+                Application.Current.Resources["CorFundoDinamica"] = new SolidColorBrush(Colors.WhiteSmoke);
+                Application.Current.Resources["CorTextoDinamica"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333"));
+            }
+        }
         // 3. Método para o botão Salvar
         private void btnSalvar_Click(object sender, RoutedEventArgs e)
         {

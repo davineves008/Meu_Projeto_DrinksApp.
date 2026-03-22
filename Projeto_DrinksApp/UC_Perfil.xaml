@@ -9,6 +9,27 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="30">
+
+            <Button x:Name="BtnVoltar" 
+                    HorizontalAlignment="Left" 
+                    Margin="0,0,0,25" 
+                    Background="Transparent" 
+                    BorderBrush="Transparent" 
+                    Cursor="Hand"
+                    Click="BtnVoltar_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Path Data="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" 
+                          Fill="#FF00F9FF" 
+                          Width="18" Height="18" Stretch="Fill"/>
+                    <TextBlock Text="Voltar " 
+                               Foreground="#FF00F9FF" 
+                               VerticalAlignment="Center" 
+                               Margin="10,0,0,0" 
+                               FontSize="14" 
+                               FontWeight="SemiBold"/>
+                </StackPanel>
+            </Button>
+
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,5">
                 <TextBlock Text="Meu Perfil" FontSize="26" FontWeight="Bold" Foreground="White"/>
 
@@ -70,7 +91,6 @@
             </Border>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,35,0,0">
-
                 <Button x:Name="btnAdminArea" Content="PAINEL DE CONTROLE ADM" Click="btnAdminArea_Click"
                         Visibility="Collapsed" Background="#FFFFD700" Foreground="Black" FontWeight="Black"
                         Width="220" Height="42" Margin="0,0,15,0" Cursor="Hand">

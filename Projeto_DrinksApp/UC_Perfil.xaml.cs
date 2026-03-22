@@ -88,5 +88,15 @@ namespace Projeto_DrinksApp
             WindowHome admWin = new WindowHome(App.ClienteLogado.Nome);
             admWin.Show();
         }
+
+        //Btn voltar a tela de config.
+        private void BtnVoltar_Click(object sender, RoutedEventArgs e)
+        {
+            // Acessa a instância da WindowHome e carrega novamente a UC_Config
+            if (WindowHome.Instancia != null)
+            {
+                WindowHome.Instancia.ConteudoPrincipal.Content = new UC_Config();
+            }
+        }
     }
 }

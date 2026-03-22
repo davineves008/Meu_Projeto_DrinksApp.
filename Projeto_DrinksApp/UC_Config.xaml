@@ -33,12 +33,16 @@
                 </StackPanel>
             </Button>
 
-            <Button Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1">
+            <Button x:Name="btnSeguranca" Click="btnSeguranca_Click"
+        Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1" Cursor="Hand">
                 <StackPanel>
-                    <Path Data="M12,12H19C18.47,16.11 15.72,19.78 12,20.93V12H5V6.3L12,3.19M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z" Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
-                    <TextBlock Text="Segurança e Dados" Foreground="White" FontWeight="SemiBold"/>
+                    <Path Data="M12,12H19C18.47,16.11 15.72,19.78 12,20.93V12H5V6.3L12,3.19M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z" 
+              Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
+                    <TextBlock Text="Segurança e Dados" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Button>
+
+            <ContentControl x:Name="AreaConfiguracao" Margin="0,20,0,0"/>
 
         </UniformGrid>
     </StackPanel>

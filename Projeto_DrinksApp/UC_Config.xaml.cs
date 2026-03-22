@@ -45,14 +45,24 @@ namespace Projeto_DrinksApp
                 windowHome.ConteudoPrincipal.Content = new UC_Perfil();
             }
         }
+
+        //btn Pra tela de notificações;
         private void BtnGoNotificacoes_Click(object sender, RoutedEventArgs e)
         {
-            // Acessa a Window principal para trocar o conteúdo
-            var mainWindow = System.Windows.Application.Current.MainWindow as WindowHome;
-            if (mainWindow != null)
-            {
-                mainWindow.ConteudoPrincipal.Content = new UC_Notificacoes();
-            }
+            // Instancia o UserControl de Notificações
+            UC_Notificacoes telaNotificacoes = new UC_Notificacoes();
+
+            // Coloca ele dentro do ContentControl chamado AreaConfiguracao
+            AreaConfiguracao.Content = telaNotificacoes;
+
+            
+        }
+
+        //Btn pra tela de segurança de dados;
+        private void btnSeguranca_Click(object sender, RoutedEventArgs e)
+        {
+            // Limpa o que estiver na tela e coloca a UC de Segurança
+            AreaConfiguracao.Content = new UC_Seguranca();
         }
     }
 }

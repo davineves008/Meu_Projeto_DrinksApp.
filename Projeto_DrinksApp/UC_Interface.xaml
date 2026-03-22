@@ -9,6 +9,8 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="30">
+            
+            
 
             <TextBlock Text="Personalização" FontSize="24" FontWeight="SemiBold" Foreground="#333333" Margin="0,0,0,5"/>
             <TextBlock Text="Ajuste as cores, temas e comportamentos visuais do sistema." FontSize="12" Foreground="#666666" Margin="0,0,0,30"/>
