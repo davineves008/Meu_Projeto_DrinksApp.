@@ -26,13 +26,18 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+
+                        <StackPanel Grid.Column="0">
                             <TextBlock Text="Preço (R$)" Foreground="#88FFFFFF" Margin="0,0,0,5"/>
                             <TextBox x:Name="txtPreco" Height="35" Background="#22FFFFFF" Foreground="White" BorderBrush="#44FFFFFF" VerticalContentAlignment="Center" Padding="5"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="1">
+
+                        <StackPanel Grid.Column="2">
                             <TextBlock Text="Categoria" Foreground="#88FFFFFF" Margin="0,0,0,5"/>
                             <ComboBox x:Name="cbCategoria" Height="35" Background="#111111" Foreground="Black" BorderBrush="#44FFFFFF">
                                 <ComboBoxItem Content="Cerveja"/>
@@ -41,6 +46,11 @@
                                 <ComboBoxItem Content="Lanches"/>
                                 <ComboBoxItem Content="Destilados"/>
                             </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="4">
+                            <TextBlock Text="Qtd." Foreground="#88FFFFFF" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtEstoque" Height="35" Background="#22FFFFFF" Foreground="White" BorderBrush="#44FFFFFF" VerticalContentAlignment="Center" Padding="5" TextAlignment="Center"/>
                         </StackPanel>
                     </Grid>
 
