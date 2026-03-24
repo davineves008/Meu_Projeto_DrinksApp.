@@ -1,6 +1,7 @@
-﻿using System.Data.SqlClient;
+﻿using Projeto_DrinksApp.Models;
+using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 using System.Windows;
-using Projeto_DrinksApp.Models;
 
 public class ClienteRepositorio
 {
@@ -188,5 +189,51 @@ public class ClienteRepositorio
                 return false;
             }
         }
+    }
+
+    //Metodo que verifica no banco se o clinte ja existe;
+    public bool ExisteCliente(string nome)
+    {
+
+
+        string stringConexao = @"Server=TQR216785\SQLEXPRESS;Database=DrinkApps;User Id=tds;Password=tds123;";
+
+        try
+        {
+            using (SqlConnection conn = new SqlConnection(stringConexao)) // Use a sua variável de conexão aqui
+            {
+                conn.Open();
+
+                // A query busca apenas o COUNT para ser mais leve e rápida
+                string query = "SELECT COUNT(*) FROM clientes WHERE nome = @nome";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    // O .Trim() remove espaços vazios acidentais no início ou fim do nome
+                    cmd.Parameters.AddWithValue("@nome", nome.Trim());
+
+                    // ExecuteScalar retorna a primeira coluna da primeira linha (o resultado do COUNT)
+                    int resultado = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    // Se o resultado for maior que 0, o cliente já existe
+                    return resultado > 0;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Caso ocorra um erro de conexão, você pode logar o erro aqui
+            throw new Exception("Erro ao verificar duplicidade de cliente: " + ex.Message);
+        }
+    }
+
+    //Meto que verifica se o cpf tem 11 digitos.
+    public bool ValidarFormatoCPF(string cpf)
+    {
+        // Remove qualquer máscara (pontos ou traços) que o usuário possa ter digitado
+        string apenasNumeros = Regex.Replace(cpf, @"[^\d]", "");
+
+        // Verifica se tem exatamente 11 dígitos
+        return apenasNumeros.Length == 11;
     }
 }
