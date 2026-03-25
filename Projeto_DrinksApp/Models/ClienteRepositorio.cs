@@ -65,48 +65,59 @@ public class ClienteRepositorio
         }
     }
     // Método de cadastro permanece igual, apenas verifique se a conexão está abrindo corretamente
-    public bool CadastrarCompleto(Clientes cliente)
+    public void FinalizarCadastro(Clientes cliente, Endereço endereco)
     {
         string connString = @"Server=TQR216785\SQLEXPRESS;Database=DrinkApps;User Id=tds;Password=tds123;";
 
-        using (SqlConnection conn = new SqlConnection(connString))
+        using (SqlConnection con = new SqlConnection(connString))
         {
+            con.Open();
+            SqlTransaction transacao = con.BeginTransaction();
+
             try
             {
-                conn.Open();
-                // Adicionei o campo 'nivel' na query SQL
-                string query = @"INSERT INTO usuarios (nome, email, cpf, usuario, senha, nivel, logradouro, numero, bairro, cidade, estado, cep) 
-                             VALUES (@nome, @email, @cpf, @usuario, @senha, @nivel, @log, @num, @bairro, @cid, @est, @cep)";
+                // PASSO 1: Inserir o Cliente e pegar o ID gerado
+                string sqlCliente = @"INSERT INTO Clientes (nome, email, cidade, cpf, Senha, Usuario, nivel) 
+                                 OUTPUT INSERTED.idcliente 
+                                 VALUES (@nome, @email, @cidade, @cpf, @senha, @usuario, @nivel)";
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@nome", cliente.Nome);
-                    cmd.Parameters.AddWithValue("@email", cliente.Email);
-                    cmd.Parameters.AddWithValue("@cpf", cliente.CPF);
-                    cmd.Parameters.AddWithValue("@usuario", cliente.Usuario);
-                    cmd.Parameters.AddWithValue("@senha", cliente.Senha);
-                    cmd.Parameters.AddWithValue("@nivel", cliente.Nivel); // Gravando o nível
+                SqlCommand cmdCliente = new SqlCommand(sqlCliente, con, transacao);
+                cmdCliente.Parameters.AddWithValue("@nome", cliente.Nome);
+                cmdCliente.Parameters.AddWithValue("@email", cliente.Email);
+                cmdCliente.Parameters.AddWithValue("@cidade", cliente.Cidade); // CORRIGIDO: Adicionado .Cidade
+                cmdCliente.Parameters.AddWithValue("@cpf", cliente.CPF);
+                cmdCliente.Parameters.AddWithValue("@senha", cliente.Senha);
+                cmdCliente.Parameters.AddWithValue("@usuario", cliente.Usuario); // CORRIGIDO: de Login para Usuario
+                cmdCliente.Parameters.AddWithValue("@nivel", cliente.Nivel);
 
-                    // Endereço
-                    cmd.Parameters.AddWithValue("@log", cliente.EnderecoResidencial.Logradouro);
-                    cmd.Parameters.AddWithValue("@num", cliente.EnderecoResidencial.Numero);
-                    cmd.Parameters.AddWithValue("@bairro", cliente.EnderecoResidencial.Bairro);
-                    cmd.Parameters.AddWithValue("@cid", cliente.EnderecoResidencial.Cidade);
-                    cmd.Parameters.AddWithValue("@est", cliente.EnderecoResidencial.Estado);
-                    cmd.Parameters.AddWithValue("@cep", cliente.EnderecoResidencial.Cep);
+                int idGerado = (int)cmdCliente.ExecuteScalar();
 
-                    cmd.ExecuteNonQuery();
-                    return true;
-                }
+                // PASSO 2: Inserir o Endereço vinculado ao ID do cliente
+                string sqlEndereco = @"INSERT INTO Endereco (idcliente, logradouro, numero, bairro, cidade, estado, cep) 
+                                 VALUES (@idid, @rua, @num, @bairro, @cidade, @estado, @cep)";
+
+                SqlCommand cmdEnd = new SqlCommand(sqlEndereco, con, transacao);
+                cmdEnd.Parameters.AddWithValue("@idid", idGerado);
+                cmdEnd.Parameters.AddWithValue("@rua", endereco.Logradouro);
+                cmdEnd.Parameters.AddWithValue("@num", endereco.Numero);
+                cmdEnd.Parameters.AddWithValue("@bairro", endereco.Bairro);
+                cmdEnd.Parameters.AddWithValue("@cidade", endereco.Cidade);
+                cmdEnd.Parameters.AddWithValue("@estado", endereco.Estado);
+                cmdEnd.Parameters.AddWithValue("@cep", endereco.Cep);
+
+                cmdEnd.ExecuteNonQuery();
+
+                transacao.Commit();
+                MessageBox.Show("Cadastro realizado com sucesso!", "Sucesso");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro no banco: " + ex.Message);
-                return false;
+                // Se algo der errado no Passo 1 ou 2, ele cancela os dois para não criar dados órfãos
+                if (transacao.Connection != null) transacao.Rollback();
+                MessageBox.Show("Erro ao salvar no banco: " + ex.Message, "Erro técnico");
             }
         }
     }
-
 
     //quando edito os dados pela tela de perfil ele atualiza no banco de dados.
     public bool AtualizarCliente(int id, string nome, string email)

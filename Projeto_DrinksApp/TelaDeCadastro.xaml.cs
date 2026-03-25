@@ -36,81 +36,54 @@ namespace Projeto_DrinksApp
         }
 
         //btn pra cadastra cliente e endereço
-        public void BtnCadastrar_Click(object sender, RoutedEventArgs e)
+        private void BtnCadastrar_Click(object sender, RoutedEventArgs e)
         {
-            // 1. Validação de campos obrigatórios do Cliente
-            if (string.IsNullOrWhiteSpace(txtNome.Text) ||
-                string.IsNullOrWhiteSpace(txtUsuario.Text) ||
-                string.IsNullOrWhiteSpace(txtCPF.Text) ||
-                string.IsNullOrWhiteSpace(txtEmail.Text))
-            {
-                MessageBox.Show("Por favor, preencha todos os dados pessoais do cliente.", "Campos Vazios");
-                return;
-            }
-
-            // 2. Validação de campos obrigatórios do Endereço
-            if (string.IsNullOrWhiteSpace(txtLogradouro.Text) ||
-                string.IsNullOrWhiteSpace(txtNumero.Text) ||
-                string.IsNullOrWhiteSpace(txtBairro.Text) ||
-                string.IsNullOrWhiteSpace(txtCidade.Text) ||
-                string.IsNullOrWhiteSpace(txtEstado.Text) ||
-                string.IsNullOrWhiteSpace(txtCEP.Text))
-            {
-                MessageBox.Show("Os dados de endereço são obrigatórios. Por favor, preencha todos os campos.", "Endereço Incompleto");
-                return;
-            }
-
-            // 3. Tratamento e Validação do CPF (11 dígitos)
-            string cpfLimpo = Regex.Replace(txtCPF.Text, @"[^\d]", "");
-            if (cpfLimpo.Length != 11)
-            {
-                MessageBox.Show("O CPF deve conter exatamente 11 dígitos.", "CPF Inválido");
-                return;
-            }
-
-            // 4. Verificação de duplicidade no Banco
+            // 1. Instancia o repositório onde criamos o método com Transação
             ClienteRepositorio repo = new ClienteRepositorio();
-            if (repo.ExisteCliente(txtNome.Text))
-            {
-                MessageBox.Show("Este nome de cliente já existe no sistema.", "Duplicado", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
 
-            // 5. Nível de acesso
-            int nivelSelecionado = cbNivel.Text == "ADM" ? 1 : 0;
-
-            // 6. Montagem do objeto Cliente e Endereço
-            Clientes novoCliente = new Clientes()
-            {
-                Nome = txtNome.Text.Trim(),
-                Email = txtEmail.Text.Trim(),
-                Usuario = txtUsuario.Text.Trim(),
-                Senha = txtSenha.Password,
-                CPF = cpfLimpo,
-                Nivel = nivelSelecionado,
-                EnderecoResidencial = new Endereço()
-                {
-                    Logradouro = txtLogradouro.Text.Trim(),
-                    Numero = txtNumero.Text.Trim(),
-                    Bairro = txtBairro.Text.Trim(),
-                    Cidade = txtCidade.Text.Trim(),
-                    Estado = txtEstado.Text.Trim(),
-                    Cep = Regex.Replace(txtCEP.Text, @"[^\d]", "")
-                }
-            };
-
-            // 7. Envio para o Banco de Dados
             try
             {
-                if (repo.CadastrarCompleto(novoCliente))
+                // 2. Criar o objeto do Cliente com os dados da tela
+                // Note: Usei os nomes que aparecem na sua classe e no banco (Usuario, Senha, etc)
+                Clientes novoCliente = new Clientes
                 {
-                    MessageBox.Show("Cliente e endereço cadastrados com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
-                    this.Close();
+                    Nome = txtNome.Text,
+                    Email = txtEmail.Text,
+                    CPF = txtCPF.Text,
+                    Cidade = txtCidade.Text, // A coluna cidade que existe na sua tabela Clientes
+                    Usuario = txtUsuario.Text,
+                    Senha = txtSenha.Password, // Se for PasswordBox, use .Password
+                    Nivel = cbNivel.SelectedIndex == 0 ? 0 : 1 // 0 para Usuário, 1 para Admin
+                };
+
+                // 3. Criar o objeto de Endereço com os dados da parte direita da sua tela
+                Endereço novoEndereco = new Endereço
+                {
+                    Logradouro = txtLogradouro.Text,
+                    Numero = txtNumero.Text,
+                    Bairro = txtBairro.Text,
+                    Cidade = txtCidade.Text,
+                    Estado = txtEstado.Text,
+                    Cep = txtCPF.Text
+                };
+
+                // 4. Validação básica (Opcional, mas recomendado)
+                if (string.IsNullOrEmpty(novoCliente.Usuario) || string.IsNullOrEmpty(novoEndereco.Logradouro))
+                {
+                    MessageBox.Show("Por favor, preencha todos os campos obrigatórios.");
+                    return;
                 }
+
+                // 5. Chama o método que salva nas DUAS tabelas ao mesmo tempo
+                repo.FinalizarCadastro(novoCliente, novoEndereco);
+
+                // 6. Se o método FinalizarCadastro não disparar exceção, deu tudo certo!
+                this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao salvar: " + ex.Message, "Erro");
+                // Se der erro no Passo 1 (Cliente) ou no Passo 2 (Endereço), cai aqui
+                MessageBox.Show("Não foi possível concluir o cadastro.\nDetalhes: " + ex.Message, "Erro");
             }
         }
     }

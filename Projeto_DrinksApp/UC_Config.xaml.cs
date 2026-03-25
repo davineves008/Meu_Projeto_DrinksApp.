@@ -32,8 +32,7 @@ namespace Projeto_DrinksApp
         private void VerificarAcessoAdm()
         {
             // Verificamos se o nível é IGUAL a 1 (int) e não ao texto "ADM"
-            if (WindowHome.Instancia?.Usuariologado != null &&
-                WindowHome.Instancia.Usuariologado.Nivel == 1)
+            if (App.ClienteLogado != null && App.ClienteLogado.Nivel == 1)
             {
                 btnCriarProduto.Visibility = Visibility.Visible;
             }
@@ -45,11 +44,14 @@ namespace Projeto_DrinksApp
 
         private void btnCriarProduto_Click(object sender, RoutedEventArgs e)
         {
-            if (WindowHome.Instancia != null)
-            {
-                // Isso remove a UC_Config e coloca a Uc_CriarProduto no lugar
-                WindowHome.Instancia.ConteudoPrincipal.Content = new Uc_CriarProduto();
-            }
+            StackPrincipal.Visibility = Visibility.Collapsed;
+
+            // 2. Mostra o porta-retratos
+            ConteudoConfig.Visibility = Visibility.Visible;
+
+            // 3. Coloca a sua tela de cadastro lá dentro
+            // Substitua 'UC_CadastroProduto' pelo nome real da sua tela de cadastro
+            ConteudoConfig.Content = new Uc_CriarProduto();
         }
         //Btn pra tela de interfaces;
         private void BtnGoInterface_Click(object sender, RoutedEventArgs e)
@@ -79,7 +81,7 @@ namespace Projeto_DrinksApp
             UC_Notificacoes telaNotificacoes = new UC_Notificacoes();
 
             // Coloca ele dentro do ContentControl chamado AreaConfiguracao
-            AreaConfiguracao.Content = telaNotificacoes;
+            ConteudoConfig.Content = telaNotificacoes;
 
             
         }
@@ -87,8 +89,25 @@ namespace Projeto_DrinksApp
         //Btn pra tela de segurança de dados;
         private void btnSeguranca_Click(object sender, RoutedEventArgs e)
         {
-            // Limpa o que estiver na tela e coloca a UC de Segurança
-            AreaConfiguracao.Content = new UC_Seguranca();
+            // 1. Esconde os botões
+            StackPrincipal.Visibility = Visibility.Collapsed;
+
+            // 2. Mostra a área de conteúdo
+            ConteudoConfig.Visibility = Visibility.Visible;
+
+            // 3. Carrega a tela de segurança
+            ConteudoConfig.Content = new UC_Seguranca();
+        }
+
+        //Metodo que volta ao menu;
+        public void VoltarAoMenuPrincipal()
+        {
+            // Reexibe os botões e esconde o conteúdo de segurança
+            StackPrincipal.Visibility = Visibility.Visible;
+            ConteudoConfig.Visibility = Visibility.Collapsed;
+
+            // Limpa o conteúdo para economizar memória (opcional)
+            ConteudoConfig.Content = null;
         }
     }
 }

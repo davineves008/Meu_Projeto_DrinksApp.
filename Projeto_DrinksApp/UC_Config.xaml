@@ -5,55 +5,52 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" d:DesignWidth="700"
              Background="Transparent" Height="532">
-    <StackPanel Margin="40">
-        <TextBlock Text="Configurações" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
-        <TextBlock Text="Escolha uma categoria para ajustar o seu DrinksApp." Foreground="#88FFFFFF" Margin="0,0,0,30"/>
+    <Grid>
+        <StackPanel x:Name="StackPrincipal" Margin="40" Visibility="Visible">
+            <TextBlock Text="Configurações" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+            <TextBlock Text="Escolha uma categoria para ajustar o seu DrinksApp." Foreground="#88FFFFFF" Margin="0,0,0,30"/>
 
-        <UniformGrid Columns="2">
+            <UniformGrid Columns="2">
+                <Button x:Name="btnGoInterface" Click="BtnGoInterface_Click" Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1">
+                    <StackPanel>
+                        <Path Data="M12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22Z" Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
+                        <TextBlock Text="Personalização e Temas" Foreground="White" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Button>
 
-            <Button x:Name="btnGoInterface" Click="BtnGoInterface_Click" Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1">
-                <StackPanel>
-                    <Path Data="M12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22Z" Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
-                    <TextBlock Text="Personalização e Temas" Foreground="White" FontWeight="SemiBold"/>
-                </StackPanel>
-            </Button>
+                <Button x:Name="btnGoPerfil" Click="BtnGoPerfil_Click" Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1">
+                    <StackPanel>
+                        <Path Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
+                        <TextBlock Text="Meu Perfil" Foreground="White" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Button>
 
-            <Button x:Name="btnGoPerfil" Click="BtnGoPerfil_Click" Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1">
-                <StackPanel>
-                    <Path Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
-                    <TextBlock Text="Meu Perfil" Foreground="White" FontWeight="SemiBold"/>
-                </StackPanel>
-            </Button>
+                <Button Click="BtnGoNotificacoes_Click" Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1">
+                    <StackPanel>
+                        <Path Data="M12,22A2,2 0 0,0 14,20H10A2,2 0 0,0 12,22M18,16V11C18,7.93 16.36,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16Z" Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
+                        <TextBlock Text="Notificações" Foreground="White" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Button>
 
-            <Button  Click="BtnGoNotificacoes_Click" Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1">
-                <StackPanel>
-                    <Path Data="M12,22A2,2 0 0,0 14,20H10A2,2 0 0,0 12,22M18,16V11C18,7.93 16.36,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16Z" Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
-                    <TextBlock Text="Notificações" Foreground="White" FontWeight="SemiBold"/>
-                </StackPanel>
-            </Button>
+                <Button x:Name="btnSeguranca" Click="btnSeguranca_Click" Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1" Cursor="Hand">
+                    <StackPanel>
+                        <Path Data="M12,12H19C18.47,16.11 15.72,19.78 12,20.93V12H5V6.3L12,3.19M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z" Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
+                        <TextBlock Text="Segurança e Dados" Foreground="White" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Button>
 
-            <Button x:Name="btnSeguranca" Click="btnSeguranca_Click"
-        Margin="10" Height="100" Background="#22FFFFFF" BorderBrush="#3300F9FF" BorderThickness="1" Cursor="Hand">
-                <StackPanel>
-                    <Path Data="M12,12H19C18.47,16.11 15.72,19.78 12,20.93V12H5V6.3L12,3.19M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z" 
-              Fill="#FF00F9FF" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
-                    <TextBlock Text="Segurança e Dados" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-
-            <Button x:Name="btnCriarProduto" 
+                <Button x:Name="btnCriarProduto" 
         Click="btnCriarProduto_Click" 
-        Visibility="Visible"
+        Visibility="Collapsed" 
         Margin="10" Height="100" Background="#22FFD700" BorderBrush="#AAFFD700" BorderThickness="1" Cursor="Hand">
-                <StackPanel>
-                    <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" 
-              Fill="#FFFFD700" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
-                    <TextBlock Text="Cadastrar Produtos (ADM)" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
-                </StackPanel>
-            </Button>
+                    <StackPanel>
+                        <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" Fill="#FFFFD700" Width="25" Height="25" Stretch="Fill" Margin="0,0,0,10"/>
+                        <TextBlock Text="Cadastrar Produtos (ADM)" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </UniformGrid>
+        </StackPanel>
 
-            <ContentControl x:Name="AreaConfiguracao" Margin="0,20,0,0"/>
-
-        </UniformGrid>
-    </StackPanel>
+        <ContentControl x:Name="ConteudoConfig" Visibility="Collapsed" />
+    </Grid>
 </UserControl>

@@ -127,11 +127,18 @@ namespace Projeto_DrinksApp
         //Btn pra voltar a tela de config.
         private void BtnVoltar_Click(object sender, RoutedEventArgs e)
         {
-            // Verifica se a instância estática da WindowHome existe
-            if (WindowHome.Instancia != null)
+            // 1. Procura na árvore visual até encontrar o UC_Config
+            DependencyObject parent = VisualTreeHelper.GetParent(this);
+
+            while (parent != null && !(parent is UC_Config))
             {
-                // Instancia a UC_Config e coloca no ConteudoPrincipal da WindowHome
-                WindowHome.Instancia.ConteudoPrincipal.Content = new UC_Config();
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+
+            // 2. Se encontrou, chama a função de voltar que criamos lá
+            if (parent is UC_Config telaConfig)
+            {
+                telaConfig.VoltarAoMenuPrincipal();
             }
         }
     }

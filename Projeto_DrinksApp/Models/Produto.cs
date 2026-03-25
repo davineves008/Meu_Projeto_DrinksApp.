@@ -8,9 +8,11 @@ namespace Projeto_DrinksApp
         // Propriedades que refletem o Banco de Dados
         public int IdProduto { get; set; }
        
-        public string Nome { get; set; }
-        public decimal Preco { get; set; } // SQL Decimal(10,2) vira decimal no C#
-        public int Estoque { get; set; }
+        
+            public string Nome { get; set; }
+            public decimal Preco { get; set; }
+            public int Estoque { get; set; }
+            public int IdTipo { get; set; } // Representa a coluna 'idtipo' do seu banco
         
 
         // Propriedade extra para o funcionamento do Carrinho (não precisa estar no SQL)

@@ -52,33 +52,72 @@ namespace Projeto_DrinksApp
                 }
             }
         }
+
+        //Metodo que carrega o perfil.
         private void CarregarPerfil()
         {
             if (App.ClienteLogado != null)
             {
-                // 1. COLOCA O ENDEREÇO NO TOPO (No lugar do texto verde da imagem a8045a)
+                // 1. Preenchimento de Dados Básicos
+                txtNome.Text = App.ClienteLogado.Nome;
+                txtEmail.Text = App.ClienteLogado.Email;
+
+                // 2. Lógica do Endereço (Garante exibição para usuário comum)
                 if (App.ClienteLogado.EnderecoResidencial != null)
                 {
-                    // Exibe: Rua Tal, 123 - Cidade
-                    txtEndereco.Text = $"{App.ClienteLogado.EnderecoResidencial.Logradouro}, {App.ClienteLogado.EnderecoResidencial.Numero}";
+                    // Verifica se as propriedades não são nulas antes de montar a string
+                    string logradouro = App.ClienteLogado.EnderecoResidencial.Logradouro ?? "Rua não informada";
+                    string numero = App.ClienteLogado.EnderecoResidencial.Numero ?? "S/N";
+
+                    txtEndereco.Text = $"{logradouro}, {numero}";
+                    txtCidade.Text = App.ClienteLogado.EnderecoResidencial.Cidade ?? "Cidade não informada";
                 }
                 else
                 {
                     txtEndereco.Text = "Endereço não cadastrado";
+                    txtCidade.Text = "---";
                 }
 
-                // 2. Preenche os campos do formulário normalmente
-                txtNome.Text = App.ClienteLogado.Nome;
-                txtEmail.Text = App.ClienteLogado.Email;
-                txtCidade.Text = App.ClienteLogado.EnderecoResidencial?.Cidade;
-                txtEndereco.Text = App.ClienteLogado.EnderecoResidencial?.Logradouro;
-
-                // 3. Lógica do Nível (Badge e Botão ADM)
+                // 3. Lógica do Nível (Comparação correta de int com int)
                 if (App.ClienteLogado.Nivel == 1)
                 {
                     txtNivelUsuario.Text = "ADMINISTRADOR";
                     btnAdminArea.Visibility = Visibility.Visible;
-                    borderNivel.BorderBrush = Brushes.Gold;
+                    if (borderNivel != null) borderNivel.BorderBrush = Brushes.Gold;
+                }
+                else
+                {
+                    txtNivelUsuario.Text = "CLIENTE";
+                    btnAdminArea.Visibility = Visibility.Collapsed;
+                    if (borderNivel != null) borderNivel.BorderBrush = Brushes.Gray;
+                }
+
+                // 4. Busca do Último Pedido Realizado
+                try
+                {
+                    Models.PedidoRepositorio repo = new Models.PedidoRepositorio();
+
+                    // Busca a lista usando o ID do cliente logado
+                    var pedidos = repo.ListarPedidosPorCliente(App.ClienteLogado.IdCliente);
+
+                    if (pedidos != null && pedidos.Count > 0)
+                    {
+                        // O primeiro da lista é o mais recente devido ao ORDER BY DESC no SQL
+                        var ultimo = pedidos[0];
+
+                        lblUltimoPedido.Text = $"Pedido #{ultimo.IdPedido} - {ultimo.Observacoes}";
+                        txtDataPedido.Text = $"Entregue em: {ultimo.DataPedido:dd/MM/yyyy}";
+                    }
+                    else
+                    {
+                        lblUltimoPedido.Text = "Nenhum pedido recente";
+                        txtDataPedido.Text = "Entregue em: --/--/----";
+                    }
+                }
+                catch (Exception)
+                {
+                    lblUltimoPedido.Text = "Erro ao carregar histórico";
+                    txtDataPedido.Text = "Entregue em: --/--/----";
                 }
             }
         }

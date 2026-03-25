@@ -60,5 +60,31 @@ namespace Projeto_DrinksApp.Models
             }
         }
 
+        //Cadastro de produto;
+        public void CadastrarProduto(Produto produto)
+        {
+
+         
+            // Lembre-se de usar sua string de conexão correta aqui
+            using (SqlConnection conn = new SqlConnection(Conexao.stringConexao))
+            {
+                conn.Open();
+                // NOMES REAIS DAS COLUNAS: nomedoproduto, idtipo, precounitario, estoque
+                string sql = "INSERT INTO Produtos (nomedoproduto, idtipo, precounitario, estoque) " +
+                             "VALUES (@nome, @tipo, @preco, @estoque)";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@nome", produto.Nome);
+                    cmd.Parameters.AddWithValue("@tipo", produto.IdTipo);
+                    cmd.Parameters.AddWithValue("@preco", produto.Preco);
+                    cmd.Parameters.AddWithValue("@estoque", produto.Estoque);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        
     }
 }
