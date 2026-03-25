@@ -75,13 +75,19 @@ namespace Projeto_DrinksApp
         //btn Pra tela de notificações;
         private void BtnGoNotificacoes_Click(object sender, RoutedEventArgs e)
         {
-            // Instancia o UserControl de Notificações
+            // 1. Instancia a tela de notificações
             UC_Notificacoes telaNotificacoes = new UC_Notificacoes();
 
-            // Coloca ele dentro do ContentControl chamado AreaConfiguracao
-            AreaConfiguracao.Content = telaNotificacoes;
+            // 2. Busca a janela onde este UserControl está "espetado"
+            // Substitua 'MainWindow' ou 'WindowHome' pelo nome real da sua classe da tela principal
+            var windowHome = Window.GetWindow(this) as WindowHome;
 
-            
+            if (windowHome != null)
+            { 
+                
+                // 3. Acessa o ContentControl da tela principal e troca o conteúdo
+                windowHome.ConteudoPrincipal.Content = telaNotificacoes;
+            }
         }
 
         //Btn pra tela de segurança de dados;
