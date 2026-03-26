@@ -154,11 +154,11 @@ public class ClienteRepositorio
                 conn.Open();
 
                 // A ORDEM IMPORTA: 
-                // 1º Deleta os Pedidos (tabela dependente)
+                // 1º Deleta os Pedido (tabela dependente)
                 // 2º Deleta o Endereço (tabela dependente)
                 // 3º Deleta o Cliente (tabela principal)
                 string sql = @"
-                DELETE FROM Pedidos WHERE IdCliente = @id;
+                DELETE FROM Pedido WHERE IdCliente = @id;
                 DELETE FROM Endereco WHERE IdCliente = @id;
                 DELETE FROM Clientes WHERE IdCliente = @id;";
 
