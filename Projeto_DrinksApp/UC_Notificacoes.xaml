@@ -13,7 +13,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Button Content="" 
+        <Button x:Name="BtnVoltar"
+                Content="" 
                 FontFamily="Segoe MDL2 Assets" 
                 Click="BtnVoltar_Click" 
                 Background="Transparent" 
@@ -37,13 +38,77 @@
             </Button.Style>
         </Button>
 
-        <StackPanel Grid.Row="0" Margin="0,15,0,20">
-            <TextBlock Text="Notificações" FontSize="28" FontWeight="Bold" Foreground="White"/>
-            <TextBlock Text="Fique por dentro das atualizações do seu sistema." Foreground="#88FFFFFF"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Margin="0,15,0,20">
+            <StackPanel>
+                <TextBlock Text="Notificações" FontSize="28" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="Fique por dentro das atualizações do seu sistema." Foreground="#88FFFFFF"/>
+            </StackPanel>
+
+            <Button x:Name="BtnLimparNotificacoes" 
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Bottom"
+                    Background="Transparent" 
+                    BorderBrush="Transparent"
+                    Cursor="Hand"
+                    Click="BtnLimparNotificacoes_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="" FontFamily="Segoe MDL2 Assets" Foreground="#FFFF4444" FontSize="16" VerticalAlignment="Center"/>
+                    <TextBlock Text="Limpar Tudo" Foreground="#FFFF4444" Margin="8,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                </StackPanel>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Opacity" Value="0.7"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="1"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="ListaNotificacoes">
+            <ItemsControl x:Name="ListaNoticacoes">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#11FFFFFF" Margin="0,0,0,10" Padding="15" CornerRadius="8" BorderBrush="#22FFFFFF" BorderThickness="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="{Binding Titulo}" FontWeight="Bold" Foreground="#FF00F9FF" FontSize="14"/>
+                                    <TextBlock Text="{Binding Mensagem}" Foreground="White" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                                    <TextBlock Text="{Binding Horario}" FontSize="10" Foreground="#88FFFFFF" Margin="0,8,0,0"/>
+                                </StackPanel>
+
+                                <Button Grid.Column="1" 
+                                        Content="" 
+                                        FontFamily="Segoe MDL2 Assets"
+                                        Background="Transparent" 
+                                        Foreground="#55FFFFFF"
+                                        BorderBrush="Transparent"
+                                        VerticalAlignment="Top"
+                                        Click="BtnExcluirUma_Click"
+                                        FontSize="14"
+                                        Cursor="Hand">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Foreground" Value="#FFFF4444"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
     </Grid>
