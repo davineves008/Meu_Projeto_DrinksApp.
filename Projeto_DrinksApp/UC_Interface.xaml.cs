@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Projeto_DrinksApp.Models;
 
 namespace Projeto_DrinksApp
 {
@@ -56,23 +57,32 @@ namespace Projeto_DrinksApp
             // 2. Altera o recurso no dicionário da aplicação
             // Isso atualiza AUTOMATICAMENTE todas as janelas que usam DynamicResource
             Application.Current.Resources["CorDestaqueDinamica"] = novaCor;
+
+            //notificação
+            NotificacaoService.Adicionar("Cor Alterada", $"A cor de destaque foi alterada.");
         }
 
         private void rbTema_Checked(object sender, RoutedEventArgs e)
         {
             if (!IsLoaded) return;
 
-            if (rbEscuro.IsChecked == true)
+            RadioButton rb = sender as RadioButton;
+
+            if (rb?.Name == "rbEscuro")
             {
-                // Tema Escuro
-                Application.Current.Resources["CorFundoDinamica"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#121212"));
-                Application.Current.Resources["CorTextoDinamica"] = new SolidColorBrush(Colors.White);
+                var gradiente = new LinearGradientBrush();
+                gradiente.StartPoint = new Point(0, 0);
+                gradiente.EndPoint = new Point(1, 1);
+                gradiente.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#1A1A2E"), 0));
+                gradiente.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#333333"), 1));
+                Application.Current.Resources["FundoGradientDinamico"] = gradiente;
+                Application.Current.Resources["CorTextoDinamica"] = new SolidColorBrush(Colors.WhiteSmoke);
             }
             else
             {
                 // Tema Claro
-                Application.Current.Resources["CorFundoDinamica"] = new SolidColorBrush(Colors.WhiteSmoke);
-                Application.Current.Resources["CorTextoDinamica"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333"));
+                Application.Current.Resources["FundoGradientDinamico"] = new SolidColorBrush(Colors.White);
+                Application.Current.Resources["CorTextoDinamica"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#121212"));
             }
         }
         // 3. Método para o botão Salvar
@@ -80,6 +90,9 @@ namespace Projeto_DrinksApp
         {
             // Aqui você salvaria as preferências (ex: Properties.Settings ou JSON)
             string tema = rbEscuro.IsChecked == true ? "Escuro" : "Claro";
+            NotificacaoService.Adicionar("Tema Alterado", $"Tema alterado para: Modo {tema}.");
+
+
             string idioma = (cmbIdioma.SelectedItem as ComboBoxItem)?.Content.ToString();
 
             MessageBox.Show($"Configurações Salvas!\nTema: {tema}\nIdioma: {idioma}",

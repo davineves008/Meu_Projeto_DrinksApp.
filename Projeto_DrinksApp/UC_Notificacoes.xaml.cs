@@ -28,21 +28,28 @@ namespace Projeto_DrinksApp
                 new NotificacaoItem { Titulo = "Sistema", Mensagem = "Backup diário concluído.", Horario = "08:00" }
             };
 
-            ListaNoticacoes.ItemsSource = Notificacoes;
+
+            ListaNoticacoes.ItemsSource = NotificacaoService.Notificacoes;
         }
 
         // Método para o botão "Limpar Tudo" (o que adicionamos no topo)
         private void BtnLimparNotificacoes_Click(object sender, RoutedEventArgs e)
         {
-            if (Notificacoes.Count == 0) return;
+            if (NotificacaoService.Notificacoes == null || NotificacaoService.Notificacoes.Count == 0)
+            {
+                MessageBox.Show("Não há notificações para limpar.");
+                return;
+            }
 
-            var resultado = MessageBox.Show("Deseja apagar todas as notificações?", "Confirmar",
-                                            MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var resultado = MessageBox.Show(
+                "Deseja limpar todas as notificações?",
+                "Confirmação",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
 
             if (resultado == MessageBoxResult.Yes)
             {
-                Notificacoes.Clear();
-                // Se fosse no banco de dados, você chamaria o comando DELETE aqui
+                NotificacaoService.Notificacoes.Clear();
             }
         }
 
@@ -61,10 +68,11 @@ namespace Projeto_DrinksApp
 
         private void BtnVoltar_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = Application.Current.MainWindow as WindowHome;
-            if (mainWindow != null)
+            var principal = Window.GetWindow(this) as WindowHome;
+
+            if (principal != null)
             {
-                mainWindow.ConteudoPrincipal.Content = new UC_Config();
+                principal.ConteudoPrincipal.Content = new UC_Config();
             }
         }
     }

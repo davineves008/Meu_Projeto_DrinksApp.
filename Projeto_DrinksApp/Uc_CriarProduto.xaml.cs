@@ -216,8 +216,12 @@ namespace Projeto_DrinksApp
 
         private void BtnVoltar_Click(object sender, RoutedEventArgs e)
         {
-            var window = Window.GetWindow(this) as WindowHome;
-            if (window != null) window.ConteudoPrincipal.Content = null;
+            var principal = Window.GetWindow(this) as WindowHome;
+
+            if (principal != null)
+            {
+                principal.ConteudoPrincipal.Content = new UC_Config();
+            }
         }
     }
 }

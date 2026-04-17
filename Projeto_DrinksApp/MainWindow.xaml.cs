@@ -57,6 +57,9 @@ namespace Projeto_DrinksApp
                     // 4. Salva o objeto na variável global para ser usado em todo o App
                     App.ClienteLogado = clienteLogado;
 
+                    //noticação
+                    NotificacaoService.Adicionar("Login Efetuado", $"Bem-vindo, {clienteLogado.Nome}! Login realizado às {DateTime.Now:HH:mm}.");
+
                     // 5. Monta a string de endereço para exibir no topo da WindowHome
                     string infoParaTopo = "";
 

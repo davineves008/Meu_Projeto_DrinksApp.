@@ -107,6 +107,7 @@ namespace Projeto_DrinksApp
 
                         lblUltimoPedido.Text = $"Pedido #{ultimo.IdPedido} - {ultimo.Observacoes}";
                         txtDataPedido.Text = $"Entregue em: {ultimo.DataPedido:dd/MM/yyyy}";
+                        txtValorPedido.Text = $" {ultimo.ValorTotal:c2}";
                     }
                     else
                     {
@@ -123,9 +124,10 @@ namespace Projeto_DrinksApp
         }
         private void btnAdminArea_Click(object sender, RoutedEventArgs e)
         {
-            // Abre a tela de Administrador passando o nome do ADM logado
             WindowHome admWin = new WindowHome(App.ClienteLogado.Nome);
             admWin.Show();
+
+            Window.GetWindow(this)?.Close();
         }
 
         //Btn voltar a tela de config.

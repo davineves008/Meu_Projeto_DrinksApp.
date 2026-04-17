@@ -162,6 +162,9 @@ namespace Projeto_DrinksApp
 
                         MessageBox.Show($"Pedido finalizado!\nTotal: {totalVenda:C2}\nEstoque e Histórico atualizados.");
 
+                        //notificação
+                        NotificacaoService.Adicionar("Compra Realizada", $"Pedido #{novoPedido.IdPedido} finalizado com sucesso.");
+
                         // 8. Limpa e Reseta
                         App.CarrinhoGlobal.Clear();
                         FinalizarEResetarCarrinho();

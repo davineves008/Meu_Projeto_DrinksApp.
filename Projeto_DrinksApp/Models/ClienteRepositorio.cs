@@ -202,7 +202,7 @@ public class ClienteRepositorio
         }
     }
 
-    //Metodo que verifica no banco se o clinte ja existe;
+    //Metodo que verifica no banco se o cliente ja existe;
     public bool ExisteCliente(string nome)
     {
 
@@ -238,7 +238,7 @@ public class ClienteRepositorio
         }
     }
 
-    //Meto que verifica se o cpf tem 11 digitos.
+    //Metodo que verifica se o cpf tem 11 digitos.
     public bool ValidarFormatoCPF(string cpf)
     {
         // Remove qualquer máscara (pontos ou traços) que o usuário possa ter digitado
